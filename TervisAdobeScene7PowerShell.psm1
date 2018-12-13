@@ -12,7 +12,7 @@ function ConvertFrom-TervisAdobeScene7WebToPrintURL {
 
     $SetAttrKeys | % {
         $QueryStringParameters[$_] | 
-        Get-AdobeScene7URLSourceEmbedContent} |
+        Get-AdobeScene7URLSourceEmbedContent |
         ConvertTo-Scene7URL
     }
 
@@ -29,10 +29,11 @@ function ConvertTo-Scene7URL {
     process {
         if ($AdobeScene7URLSourceEmbedContent.Substring(0,4) -eq "http") {
             $AdobeScene7URLSourceEmbedContent
-        } else {            
-            $Uri = [uri]"http://images.tervis.com/is/image/$AdobeScene7URLSourceEmbedContent"
-            $URLEncodedQuery = ConvertTo-Scene7URLEncodedQueryStringParameterString -PipelineInput ([System.Web.HttpUtility]::ParseQueryString($Uri.Query))
-            "$($Uri.GetLeftPart("Path"))?$URLEncodedQuery"
+        } else {
+            "http://images.tervis.com/is/image/$AdobeScene7URLSourceEmbedContent"
+            # $Uri = [uri]"http://images.tervis.com/is/image/$AdobeScene7URLSourceEmbedContent"
+            # $URLEncodedQuery = ConvertTo-Scene7URLEncodedQueryStringParameterString -PipelineInput ([System.Web.HttpUtility]::ParseQueryString($Uri.Query))
+            # "$($Uri.GetLeftPart("Path"))?$URLEncodedQuery"
         }
     }
 }
