@@ -1,12 +1,11 @@
 # function Get-TervisAdobeScene7
 
-function Get-TervisAdobeScene7WebToPrintURLInfo {
+function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     param (
         [uri]$RequestURI = "http://localhost:8080/is/agm/tervis/16_cstm_print?&setAttr.imgWrap={source=@Embed('is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-61e070ad-3a16-4a5b-a038-69402c1e942f))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)')}&setAttr.maskWrap={source=@Embed()}&imageres=300&fmt=pdf,rgb&.v=76113"
     )
     $ProjectID = $RequestURI.OriginalString | 
-    ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<GUID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}}?)" |
-    Select-Object -ExpandProperty GUID
+    Get-GuidFromString
 
     $Scene7CustomyzerArtboardImageURL = New-TervisAdobeScene7CustomyzerArtboardImageURL -ProjectID $ProjectID
 
@@ -23,9 +22,13 @@ function Get-TervisAdobeScene7WebToPrintURLInfo {
 
 function Get-GuidFromString {
     param (
-        [Parameter(Mandatory)]$InputString
+        [Parameter(Mandatory,ValueFromPipeline)]$InputString
     )
-    
+    process {
+        $InputString | 
+        ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<GUID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}}?)" |
+        Select-Object -ExpandProperty GUID    
+    }
 }
 
 function New-TervisAdobeScene7CustomyzerArtboardImageURL {
