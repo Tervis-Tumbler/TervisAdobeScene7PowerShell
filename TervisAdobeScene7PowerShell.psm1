@@ -1,5 +1,157 @@
 # function Get-TervisAdobeScene7
 
+function Get-TervisAdobeScene7WebToPrintURLInfo {
+    param (
+        [uri]$RequestURI = "http://localhost:8080/is/agm/tervis/16_cstm_print?&setAttr.imgWrap={source=@Embed('is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-61e070ad-3a16-4a5b-a038-69402c1e942f))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)')}&setAttr.maskWrap={source=@Embed()}&imageres=300&fmt=pdf,rgb&.v=76113"
+    )
+    $ProjectID = $RequestURI.OriginalString | 
+    ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<GUID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}}?)" |
+    Select-Object -ExpandProperty GUID
+
+    $Scene7CustomyzerArtboardImageURL = New-TervisAdobeScene7CustomyzerArtboardImageURL -ProjectID $ProjectID
+
+    $Scene7WebToPrintTemplateName = $RequestURI.Segments[-1]
+    $Scene7WebToPrintTemplateName
+
+    $StringInScene7WebToPrintTemplateNameToSizeAndFormTypeMapping = @{
+        16 = [PSCustomObject]@{
+            Size = 16
+            FormType = "DWT"
+        }
+    }
+}
+
+function Get-GuidFromString {
+    param (
+        [Parameter(Mandatory)]$InputString
+    )
+    
+}
+
+function New-TervisAdobeScene7CustomyzerArtboardImageURL {
+    param (
+        $ProjectID
+    )
+    "http://images.tervis.com/is/image/tervis/prj-$ProjectID?scl=1"
+}
+
+function New-TervisAdobeScene7BaseImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType
+    )
+    
+    $BaseTemplateName = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType |
+    Select-Object -ExpandProperty Base
+    "http://images.tervis.com/is/image/tervisRender/$($BaseTemplateName)?.BG&layer=5&anchor=0,0&src=is(tervis/prj-$ProjectID)&scl=1"
+}
+
+function New-TervisAdobeScene7VignetteImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType
+    )
+
+    $ImageTemplateNames = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType
+
+    @"
+http://images.tervis.com/ir/render/tervisRender/$($ImageTemplateNames.Vignette)?
+    &obj=group
+    &decal
+    &src=is(
+        tervisRender/$($ImageTemplateNames.Base)?
+        .BG
+        &layer=5
+        &anchor=0,0
+        &src=is(
+            tervis/prj-$ProjectID
+        )
+    )
+    &show
+    &res=300
+    &req=object
+    &fmt=png-alpha,rgb
+    &scl=1
+"@ -replace "`r`n|`n|`r|`t| ", ""
+}
+
+function New-TervisAdobeScene7VignetteImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType
+    )
+    $ImageTemplateNames = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType
+
+@"
+http://images.tervis.com/is/image/tervisRender/$($ImageTemplateNames.Final)?
+    layer=1&
+    src=ir(
+        tervisRender/$($ImageTemplateNames.Vignette)?
+        &obj=group
+        &decal
+        &src=is(
+            tervisRender/$($ImageTemplateNames.Base)?
+            .BG
+            &layer=5
+            &anchor=0,0
+            &src=is(
+                tervis/prj-$ProjectID
+            )
+        )
+        &show
+        &res=300
+        &req=object
+        &fmt=png-alpha,rgb
+    )
+    &scl=1
+"@ -replace "`r`n|`n|`r|`t| ", ""
+}
+
+function New-TervisAdobeScene7WhitInkMaskURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType,
+        [ValidateSet("00A99C","000000")]$WhiteInkColorHex = "00A99C"
+    )
+    $ImageTemplateNames = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType
+@"
+http://images.tervis.com/is/image/tervis?
+src=(
+    http://images.tervis.com/is/image/tervisRender/$($ImageTemplateNames.Mask)?
+    &layer=1
+    &mask=is(
+        tervisRender?
+        &src=ir(
+            tervisRender/$($ImageTemplateNames.Vignette)?
+            &obj=group
+            &decal
+            &src=is(
+                tervisRender/$($ImageTemplateNames.Base)?
+                .BG
+                &layer=5
+                &anchor=0,0
+                &src=is(
+                    tervis/prj-$ProjectID
+                )
+            )
+            &show
+            &res=300
+            &req=object
+            &fmt=png-alpha
+        )
+        &op_grow=-2
+    )
+    &scl=1
+)
+&scl=1
+&fmt=png8
+&quantize=adaptive,off,2,ffffff,00A99C
+"@ -replace "`r`n|`n|`r|`t| ", ""
+}
 function ConvertFrom-TervisAdobeScene7WebToPrintURL {
     param (
         [uri]$RequestURI = "http://localhost:8080/is/agm/tervis/16_cstm_print?&setAttr.imgWrap={source=@Embed('is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-61e070ad-3a16-4a5b-a038-69402c1e942f))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)')}&setAttr.maskWrap={source=@Embed('http://images.tervis.com/is/image/tervis%3fsrc=(http://images.tervis.com/is/image/tervisRender/16oz_wrap_mask%3f%26layer=1%26mask=is(tervisRender%3f%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-61e070ad-3a16-4a5b-a038-69402c1e942f))%26show%26res=300%26req=object%26fmt=png-alpha)%26op_grow=-2)%26scl=1)%26scl=1%26fmt=png8%26quantize=adaptive,off,2,ffffff,00A99C')}&imageres=300&fmt=pdf,rgb&.v=76113"
