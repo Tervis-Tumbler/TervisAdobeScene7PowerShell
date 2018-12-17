@@ -1,5 +1,3 @@
-# function Get-TervisAdobeScene7
-
 function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     param (
         [uri]$RequestURI = "http://localhost:8080/is/agm/tervis/16_cstm_print?&setAttr.imgWrap={source=@Embed('is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-61e070ad-3a16-4a5b-a038-69402c1e942f))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)')}&setAttr.maskWrap={source=@Embed()}&imageres=300&fmt=pdf,rgb&.v=76113"
@@ -11,15 +9,13 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType  -PrintImageTemplateName $Scene7WebToPrintTemplateName |
     ConvertTo-HashTable
 
-    $FinalImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
-    $WhitInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID
+    $TervisInDesignServerWebToPrintPDFContentParameters = @{
+        ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
+        WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID
+    } + $SizeAndFormTypeParameter
 
-    New-TervisInDesignServerWebToPrintPDF - param (
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$TemplateFilePath,
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$ColorImageFilePath,
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$WhiteInkImageFilePath,
-        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$PDFFilePath
-    )
+    $Content = Get-TervisInDesignServerWebToPrintPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
+    $Content
 }
 
 function Get-GuidFromString {
