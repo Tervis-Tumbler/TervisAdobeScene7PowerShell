@@ -45,7 +45,7 @@ function New-TervisAdobeScene7BaseImageURL {
         [Parameter(Mandatory)]$FormType
     )
     
-    $BaseTemplateName = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType |
+    $BaseTemplateName = Get-CustomyzerImageTemplateName -Size $Size -FormType $FormType |
     Select-Object -ExpandProperty Base
     "http://images.tervis.com/is/image/tervisRender/$($BaseTemplateName)?.BG&layer=5&anchor=0,0&src=is(tervis/prj-$ProjectID)&scl=1"
 }
@@ -56,15 +56,15 @@ function New-TervisAdobeScene7VignetteImageURL {
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType
     )
-
-    $ImageTemplateNames = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType FinalWithERPNumber
 
     @"
-http://images.tervis.com/ir/render/tervisRender/$($ImageTemplateNames.Vignette)?
+http://images.tervis.com/ir/render/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
     &obj=group
     &decal
     &src=is(
-        tervisRender/$($ImageTemplateNames.Base)?
+        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
         .BG
         &layer=5
         &anchor=0,0
@@ -86,7 +86,7 @@ function New-TervisAdobeScene7VignetteImageURL {
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType
     )
-    $ImageTemplateNames = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType
+    $ImageTemplateNames = Get-CustomyzerImageTemplateName -Size $Size -FormType $FormType
 
 @"
 http://images.tervis.com/is/image/tervisRender/$($ImageTemplateNames.Final)?
@@ -120,7 +120,7 @@ function New-TervisAdobeScene7WhitInkMaskURL {
         [Parameter(Mandatory)]$FormType,
         [ValidateSet("00A99C","000000")]$WhiteInkColorHex = "00A99C"
     )
-    $ImageTemplateNames = Get-CustomyzerImageTemplateNames -Size $Size -FormType $FormType
+    $ImageTemplateNames = Get-CustomyzerImageTemplateName -Size $Size -FormType $FormType
 @"
 http://images.tervis.com/is/image/tervis?
 src=(
