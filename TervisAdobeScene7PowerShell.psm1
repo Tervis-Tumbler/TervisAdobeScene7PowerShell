@@ -7,17 +7,19 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     $ProjectID = $RequestURI.OriginalString | 
     Get-GuidFromString
 
-    $Scene7CustomyzerArtboardImageURL = New-TervisAdobeScene7CustomyzerArtboardImageURL -ProjectID $ProjectID
-
     $Scene7WebToPrintTemplateName = $RequestURI.Segments[-1]
-    $Scene7WebToPrintTemplateName
+    $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType  -PrintImageTemplateName $Scene7WebToPrintTemplateName |
+    ConvertTo-HashTable
 
-    $StringInScene7WebToPrintTemplateNameToSizeAndFormTypeMapping = @{
-        16 = [PSCustomObject]@{
-            Size = 16
-            FormType = "DWT"
-        }
-    }
+    $FinalImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
+    $WhitInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID
+
+    New-TervisInDesignServerWebToPrintPDF - param (
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$TemplateFilePath,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$ColorImageFilePath,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$WhiteInkImageFilePath,
+        [Parameter(Mandatory,ValueFromPipelineByPropertyName)]$PDFFilePath
+    )
 }
 
 function Get-GuidFromString {
@@ -45,9 +47,18 @@ function New-TervisAdobeScene7BaseImageURL {
         [Parameter(Mandatory)]$FormType
     )
     
-    $BaseTemplateName = Get-CustomyzerImageTemplateName -Size $Size -FormType $FormType |
-    Select-Object -ExpandProperty Base
-    "http://images.tervis.com/is/image/tervisRender/$($BaseTemplateName)?.BG&layer=5&anchor=0,0&src=is(tervis/prj-$ProjectID)&scl=1"
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+
+    @"
+http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+.BG
+&layer=5
+&anchor=0,0
+&src=is(
+    tervis/prj-$ProjectID
+    )
+&scl=1"
+"@ | Remove-WhiteSpace
 }
 
 function New-TervisAdobeScene7VignetteImageURL {
@@ -57,7 +68,6 @@ function New-TervisAdobeScene7VignetteImageURL {
         [Parameter(Mandatory)]$FormType
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
-    Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType FinalWithERPNumber
 
     @"
 http://images.tervis.com/ir/render/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
@@ -77,26 +87,25 @@ http://images.tervis.com/ir/render/tervisRender/$(Get-CustomyzerImageTemplateNam
     &req=object
     &fmt=png-alpha,rgb
     &scl=1
-"@ -replace "`r`n|`n|`r|`t| ", ""
+"@ | Remove-WhiteSpace
 }
 
-function New-TervisAdobeScene7VignetteImageURL {
+function New-TervisAdobeScene7FinalImageURL {
     param (
         [Parameter(Mandatory)]$ProjectID,
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType
     )
-    $ImageTemplateNames = Get-CustomyzerImageTemplateName -Size $Size -FormType $FormType
-
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
 @"
-http://images.tervis.com/is/image/tervisRender/$($ImageTemplateNames.Final)?
+http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Final)?
     layer=1&
     src=ir(
-        tervisRender/$($ImageTemplateNames.Vignette)?
+        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
         &obj=group
         &decal
         &src=is(
-            tervisRender/$($ImageTemplateNames.Base)?
+            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
             .BG
             &layer=5
             &anchor=0,0
@@ -110,30 +119,30 @@ http://images.tervis.com/is/image/tervisRender/$($ImageTemplateNames.Final)?
         &fmt=png-alpha,rgb
     )
     &scl=1
-"@ -replace "`r`n|`n|`r|`t| ", ""
+"@ | Remove-WhiteSpace
 }
 
-function New-TervisAdobeScene7WhitInkMaskURL {
+function New-TervisAdobeScene7WhitInkImageURL {
     param (
         [Parameter(Mandatory)]$ProjectID,
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
-        [ValidateSet("00A99C","000000")]$WhiteInkColorHex = "00A99C"
+        [ValidateSet("00A99C","000000")][String]$WhiteInkColorHex = "00A99C"
     )
-    $ImageTemplateNames = Get-CustomyzerImageTemplateName -Size $Size -FormType $FormType
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
 @"
 http://images.tervis.com/is/image/tervis?
 src=(
-    http://images.tervis.com/is/image/tervisRender/$($ImageTemplateNames.Mask)?
+    http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Mask)?
     &layer=1
     &mask=is(
         tervisRender?
         &src=ir(
-            tervisRender/$($ImageTemplateNames.Vignette)?
+            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
             &obj=group
             &decal
             &src=is(
-                tervisRender/$($ImageTemplateNames.Base)?
+                tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
                 .BG
                 &layer=5
                 &anchor=0,0
@@ -152,9 +161,10 @@ src=(
 )
 &scl=1
 &fmt=png8
-&quantize=adaptive,off,2,ffffff,00A99C
-"@ -replace "`r`n|`n|`r|`t| ", ""
+&quantize=adaptive,off,2,ffffff,$WhiteInkColorHex
+"@ | Remove-WhiteSpace
 }
+
 function ConvertFrom-TervisAdobeScene7WebToPrintURL {
     param (
         [uri]$RequestURI = "http://localhost:8080/is/agm/tervis/16_cstm_print?&setAttr.imgWrap={source=@Embed('is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-61e070ad-3a16-4a5b-a038-69402c1e942f))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)')}&setAttr.maskWrap={source=@Embed('http://images.tervis.com/is/image/tervis%3fsrc=(http://images.tervis.com/is/image/tervisRender/16oz_wrap_mask%3f%26layer=1%26mask=is(tervisRender%3f%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-61e070ad-3a16-4a5b-a038-69402c1e942f))%26show%26res=300%26req=object%26fmt=png-alpha)%26op_grow=-2)%26scl=1)%26scl=1%26fmt=png8%26quantize=adaptive,off,2,ffffff,00A99C')}&imageres=300&fmt=pdf,rgb&.v=76113"
