@@ -18,17 +18,6 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     $Content
 }
 
-function Get-GuidFromString {
-    param (
-        [Parameter(Mandatory,ValueFromPipeline)]$InputString
-    )
-    process {
-        $InputString | 
-        ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<GUID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}}?)" |
-        Select-Object -ExpandProperty GUID    
-    }
-}
-
 function New-TervisAdobeScene7CustomyzerArtboardImageURL {
     param (
         $ProjectID
