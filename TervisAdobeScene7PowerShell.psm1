@@ -14,7 +14,7 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
         WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID
     } + $SizeAndFormTypeParameter
 
-    $Content = Get-TervisInDesignServerWebToPrintPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
+    $Content = Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
     $Content
 }
 
