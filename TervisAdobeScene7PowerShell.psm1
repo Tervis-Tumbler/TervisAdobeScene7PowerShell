@@ -36,7 +36,7 @@ function New-TervisAdobeScene7CustomyzerArtboardImageURL {
     param (
         $ProjectID
     )
-    "http://images.tervis.com/is/image/tervis/prj-$ProjectID?scl=1"
+    "http://images.tervis.com/is/image/tervis/prj-$($ProjectID)?scl=1"
 }
 
 function New-TervisAdobeScene7BaseImageURL {
