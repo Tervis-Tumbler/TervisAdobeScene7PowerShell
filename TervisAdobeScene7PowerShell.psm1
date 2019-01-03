@@ -18,6 +18,20 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     $Content
 }
 
+function ConvertTo-AdobeScene7RelativeURL {
+    param (
+        [Parameter(Mandatory,ValueFromPipeline)][uri]$URL,
+        [Switch]$Convert
+    )
+    process {
+        if ($Convert) {
+            ($URL.Segments | Select-Object -Skip 3) -join ""
+        } else {
+            $URL.OriginalString
+        }
+    }
+}
+
 function New-TervisAdobeScene7CustomyzerArtboardImageURL {
     param (
         $ProjectID
