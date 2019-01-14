@@ -130,36 +130,33 @@ function New-TervisAdobeScene7WhitInkImageURL {
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
 @"
-http://images.tervis.com/is/image/tervis?
-src=(
-    http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Mask)?
-    &layer=1
-    &mask=is(
-        tervisRender?
-        &src=ir(
-            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
-            &obj=group
-            &decal
+http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Mask)?
+&layer=1
+&mask=is(
+    tervisRender?
+    &src=ir(
+        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
+        &obj=group
+        &decal
+        &src=is(
+            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+            .BG
+            &layer=5
+            &anchor=0,0
             &src=is(
-                tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
-                .BG
-                &layer=5
-                &anchor=0,0
-                &src=is(
-                    tervis/prj-$ProjectID
-                )
+                tervis/prj-$ProjectID
             )
-            &show
-            &res=300
-            &req=object
-            &fmt=png-alpha
         )
-        &op_grow=-2
+        &show
+        &res=300
+        &req=object
+        &fmt=png-alpha
     )
-    &scl=1
+    &op_grow=-2
 )
 &scl=1
-&fmt=png8
+&color=000000
+&fmt=png,gray
 &quantize=adaptive,off,2,ffffff,$WhiteInkColorHex
 "@ | Remove-WhiteSpace
 }
