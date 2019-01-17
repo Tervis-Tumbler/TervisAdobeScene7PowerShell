@@ -98,26 +98,27 @@ function New-TervisAdobeScene7FinalImageURL {
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
 @"
 http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Final)?
-    layer=1&
-    src=ir(
-        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
-        &obj=group
-        &decal
+layer=1&
+src=ir(
+    tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
+    &obj=group
+    &decal
+    &src=is(
+        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+        .BG
+        &layer=5
+        &anchor=0,0
         &src=is(
-            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
-            .BG
-            &layer=5
-            &anchor=0,0
-            &src=is(
-                tervis/prj-$ProjectID
-            )
+            tervis/prj-$ProjectID
         )
-        &show
-        &res=300
-        &req=object
-        &fmt=png-alpha,rgb
     )
-    &scl=1
+    &show
+    &res=300
+    &req=object
+    &fmt=png-alpha,rgb
+)
+&scl=1
+&fmt=png-alpha,rgb
 "@ | Remove-WhiteSpace
 }
 
