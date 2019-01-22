@@ -127,39 +127,80 @@ function New-TervisAdobeScene7WhitInkImageURL {
         [Parameter(Mandatory)]$ProjectID,
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
-        [ValidateSet("00A99C","000000")][String]$WhiteInkColorHex = "00A99C"
+        [ValidateSet("00A99C","000000")][String]$WhiteInkColorHex = "00A99C",
+        [Switch]$OldWay
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    if (-not $OldWay) {
 @"
-http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Mask)?
-&layer=1
-&mask=is(
-    tervisRender?
-    &src=ir(
-        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
-        &obj=group
-        &decal
-        &src=is(
-            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
-            .BG
-            &layer=5
-            &anchor=0,0
+http://images.tervis.com/is/image/tervis?
+src=(
+    http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Mask)?
+    &layer=1
+    &mask=is(
+        tervisRender?
+        &src=ir(
+            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
+            &obj=group
+            &decal
             &src=is(
-                tervis/prj-$ProjectID
+                tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+                .BG
+                &layer=5
+                &anchor=0,0
+                &src=is(
+                    tervis/prj-$ProjectID
+                )
             )
+            &show
+            &res=300
+            &req=object
+            &fmt=png-alpha
         )
-        &show
-        &res=300
-        &req=object
-        &fmt=png-alpha
+        &op_grow=-2
     )
-    &op_grow=-2
+    &scl=1
 )
 &scl=1
 &color=000000
 &fmt=png,gray
 &quantize=adaptive,off,2,ffffff,$WhiteInkColorHex
 "@ | Remove-WhiteSpace
+    } elseif ($OldWay) {
+@"
+http://images.tervis.com/is/image/tervis?
+src=(
+    http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Mask)?
+    &layer=1
+    &mask=is(
+        tervisRender?
+        &src=ir(
+            tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
+            &obj=group
+            &decal
+            &src=is(
+                tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+                .BG
+                &layer=5
+                &anchor=0,0
+                &src=is(
+                    tervis/prj-$ProjectID
+                )
+            )
+            &show
+            &res=300
+            &req=object
+            &fmt=png-alpha
+        )
+        &op_grow=-2
+    )
+    &scl=1
+)
+&scl=1
+&fmt=png8
+&quantize=adaptive,off,2,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    }
 }
 
 # function ConvertFrom-TervisAdobeScene7WebToPrintURL {
