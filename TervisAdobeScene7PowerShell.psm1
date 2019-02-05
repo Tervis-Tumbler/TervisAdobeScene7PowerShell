@@ -5,6 +5,10 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     )
     $ProjectID = $RequestURI.OriginalString | 
     Get-GuidFromString
+    
+    $VuMarkIDParameter = $RequestURI.OriginalString | 
+    Get-TervisVuMarkIDFromString |
+    ConvertTo-HashTable
 
     $Scene7WebToPrintTemplateName = $RequestURI.Segments[-1]
     $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType  -PrintImageTemplateName $Scene7WebToPrintTemplateName |
@@ -17,9 +21,19 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
         WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID
         Port = $Port
         OrderNumber = $QueryStringParaemters.'$OrderNum'
-    } + $SizeAndFormTypeParameter
+    } + $SizeAndFormTypeParameter + $VuMarkIDParameter
 
     Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
+}
+
+function Get-TervisVuMarkIDFromString {
+    param (
+        [Parameter(Mandatory,ValueFromPipeline)]$InputString
+    )
+    process {
+        $InputString | 
+        ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<VuMarkID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}-?\w{8}}?)" 
+    }
 }
 
 function ConvertTo-AdobeScene7RelativeURL {
