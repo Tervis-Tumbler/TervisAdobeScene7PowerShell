@@ -17,13 +17,21 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     Get-TervisVuMarkIDFromString |
     ConvertTo-HashTable
 
+    $OrderNumber = $QueryStringParaemters.'$OrderNum'
+    $OrderNumberParameter = if ($OrderNumber) {
+        @{
+            OrderNumber = $OrderNumber
+        }
+    } else {
+        @{}
+    }
+
     $TervisInDesignServerWebToPrintPDFContentParameters = @{
         ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
         WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
         VuMarkImageURL = New-TervisAdobeScene7VuMarkImageURL @VuMarkIDParameter
         Port = $Port
-        OrderNumber = $QueryStringParaemters.'$OrderNum'
-    } + $SizeAndFormTypeParameter
+    } + $SizeAndFormTypeParameter + $OrderNumberParameter
 
     Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
 }
