@@ -1,27 +1,29 @@
 function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     param (
         [uri]$RequestURI = "http://images.tervis.com/is/agm/tervis/6_cstm_print?&setAttr.imgWrap={source=@Embed(%27is(tervisRender/6oz_wrap_final%3flayer=1%26src=ir(tervisRender/6_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/6oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-aa1f3d62-dd31-411e-bc46-b7c963e77ae0))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)%27)}&setAttr.maskWrap={source=@Embed(%27http://images.tervis.com/is/image/tervis%3fsrc=(http://images.tervis.com/is/image/tervisRender/6oz_wrap_mask%3f%26layer=1%26mask=is(tervisRender%3f%26src=ir(tervisRender/6_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/6oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-aa1f3d62-dd31-411e-bc46-b7c963e77ae0))%26show%26res=300%26req=object%26fmt=png-alpha)%26op_grow=-2)%26scl=1)%26scl=1%26fmt=png8%26quantize=adaptive,off,2,ffffff,00A99C%27)}&imageres=300&fmt=pdf,rgb&.v=72271&`$orderNum=11361062/2",
+        #[uri]$RequestURI = "http://images.tervis.com/is/agm/tervis/16_cstm_print_mark?&setAttr.imgWrap={source=@Embed(%27is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)%27)}&setAttr.maskWrap={source=@Embed(%27http://images.tervis.com/is/image/tervis%3fsrc=(http://images.tervis.com/is/image/tervisRender/16oz_mark_mask%3f%26layer=1%26mask=is(tervisRender%3f%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad))%26show%26res=300%26req=object%26fmt=png-alpha)%26op_grow=-2)%26scl=1%26layer=2%26src=is(tervisRender/mark_mask_v1%3f%26layer=1%26mask=is(tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11)%26scl=1)%26scl=1)%26scl=1%26fmt=png8%26quantize=adaptive,off,2,ffffff,00A99C%27)}&setAttr.imgMark={source=@Embed(%27is(tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11)%27}&imageres=300&fmt=pdf,rgb&.v=3284}",
         $Port
     )
-    $ProjectID = $RequestURI.OriginalString | 
+    $ProjectID = $RequestURI.OriginalString |
     Get-GuidFromString
     
-    $VuMarkIDParameter = $RequestURI.OriginalString | 
-    Get-TervisVuMarkIDFromString |
-    ConvertTo-HashTable
-
     $Scene7WebToPrintTemplateName = $RequestURI.Segments[-1]
-    $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType  -PrintImageTemplateName $Scene7WebToPrintTemplateName |
+    $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType -PrintImageTemplateName $Scene7WebToPrintTemplateName |
     ConvertTo-HashTable
     
     $QueryStringParaemters = $RequestURI.Query | ConvertFrom-URLEncodedQueryStringParameterString
 
+    $VuMarkIDParameter = $RequestURI.OriginalString |
+    Get-TervisVuMarkIDFromString |
+    ConvertTo-HashTable
+
     $TervisInDesignServerWebToPrintPDFContentParameters = @{
         ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
-        WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID
+        WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
+        VuMarkImageURL = New-TervisAdobeScene7VuMarkImageURL @VuMarkIDParameter
         Port = $Port
         OrderNumber = $QueryStringParaemters.'$OrderNum'
-    } + $SizeAndFormTypeParameter + $VuMarkIDParameter
+    } + $SizeAndFormTypeParameter
 
     Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
 }
@@ -32,7 +34,9 @@ function Get-TervisVuMarkIDFromString {
     )
     process {
         $InputString | 
-        ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<VuMarkID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}-?\w{8}}?)" 
+        ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<VuMarkID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}-?\w{8}}?)"
+        #  |
+        # Select-Object -ExpandProperty VuMarkID
     }
 }
 
@@ -55,6 +59,13 @@ function New-TervisAdobeScene7CustomyzerArtboardImageURL {
         $ProjectID
     )
     "http://images.tervis.com/is/image/tervis/prj-$($ProjectID)?scl=1"
+}
+
+function New-TervisAdobeScene7VuMarkImageURL {
+    param (
+        $VuMarkID
+    )
+    "http://images.tervis.com/is/image/tervis/vum-$($VuMarkID)?scl=1"
 }
 
 function New-TervisAdobeScene7BaseImageURL {
@@ -146,10 +157,11 @@ function New-TervisAdobeScene7WhitInkImageURL {
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
         [ValidateSet("00A99C","000000")][String]$WhiteInkColorHex = "00A99C",
+        $VuMarkID,
         [Switch]$OldWay
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
-    if (-not $OldWay) {
+    if (-not $OldWay -and -not $VuMarkID) {
 @"
 http://images.tervis.com/is/image/tervis?
 src=(
@@ -184,7 +196,7 @@ src=(
 &fmt=png,gray
 &quantize=adaptive,off,2,ffffff,$WhiteInkColorHex
 "@ | Remove-WhiteSpace
-    } elseif ($OldWay) {
+    } elseif ($OldWay -and -not $VuMarkID) {
 @"
 http://images.tervis.com/is/image/tervis?
 src=(
@@ -211,6 +223,50 @@ src=(
             &fmt=png-alpha
         )
         &op_grow=-2
+    )
+    &scl=1
+)
+&scl=1
+&fmt=png8
+&quantize=adaptive,off,2,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    } elseif ($VuMarkID) {
+@"
+http://images.tervis.com/is/image/tervis?
+src=(
+    http://images.tervis.com/is/image/tervisRender/16oz_mark_mask?
+    &layer=1
+    &mask=is(
+        tervisRender?
+        &src=ir(
+            tervisRender/16_Warp_trans?
+            &obj=group
+            &decal
+            &src=is(
+                tervisRender/16oz_base2?
+                .BG
+                &layer=5
+                &anchor=0,0
+                &src=is(
+                    tervis/prj-$ProjectID
+                )
+            )
+            &show
+            &res=300
+            &req=object
+            &fmt=png-alpha
+        )
+        &op_grow=-2
+    )
+    &scl=1
+    &layer=2
+    &src=is(
+        tervisRender/mark_mask_v1?
+        &layer=1
+        &mask=is(
+            tervis/vum-$VuMarkID
+        )
+        &scl=1
     )
     &scl=1
 )
