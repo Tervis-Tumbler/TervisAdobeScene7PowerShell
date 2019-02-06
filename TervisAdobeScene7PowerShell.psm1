@@ -73,7 +73,7 @@ function New-TervisAdobeScene7VuMarkImageURL {
     param (
         $VuMarkID
     )
-    "http://images.tervis.com/is/image/tervis/vum-$($VuMarkID)?scl=1"
+    "http://images.tervis.com/is/image/tervis/vum-$($VuMarkID)?scl=1&fmt=png-alpha,rgb"
 }
 
 function New-TervisAdobeScene7BaseImageURL {
