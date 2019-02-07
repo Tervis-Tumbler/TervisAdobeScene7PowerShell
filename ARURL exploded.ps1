@@ -1,0 +1,142 @@
+[uri]$RequestURI = "http://images.tervis.com/is/agm/tervis/16_cstm_print_mark?&setAttr.imgWrap={source=@Embed(%27is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)%27)}&setAttr.maskWrap={source=@Embed(%27http://images.tervis.com/is/image/tervis%3fsrc=(http://images.tervis.com/is/image/tervisRender/16oz_mark_mask%3f%26layer=1%26mask=is(tervisRender%3f%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad))%26show%26res=300%26req=object%26fmt=png-alpha)%26op_grow=-2)%26scl=1%26layer=2%26src=is(tervisRender/mark_mask_v1%3f%26layer=1%26mask=is(tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11)%26scl=1)%26scl=1)%26scl=1%26fmt=png8%26quantize=adaptive,off,2,ffffff,00A99C%27)}&setAttr.imgMark={source=@Embed(%27is(tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11)%27}&imageres=300&fmt=pdf,rgb&.v=3284}"
+
+http://images.tervis.com/is/agm/tervis/16_cstm_print_mark?
+&setAttr.imgWrap={
+    source=@Embed('
+        is(
+            tervisRender/16oz_wrap_final%3f
+            layer=1
+            %26src=ir(
+                tervisRender/16_Warp_trans%3f
+                %26obj=group
+                %26decal
+                %26src=is(
+                    tervisRender/16oz_base2%3f
+                    .BG
+                    %26layer=5
+                    %26anchor=0,0
+                    %26src=is(
+                        tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad
+                    )
+                )
+                %26show
+                %26res=300
+                %26req=object
+                %26fmt=png-alpha,rgb
+            )
+            %26fmt=png-alpha,rgb
+        )
+    ')
+}
+&setAttr.maskWrap={
+    source=@Embed('
+        http://images.tervis.com/is/image/tervis%3f
+        src=(
+            http://images.tervis.com/is/image/tervisRender/16oz_mark_mask%3f
+            %26layer=1
+            %26mask=is(
+                tervisRender%3f
+                %26src=ir(
+                    tervisRender/16_Warp_trans%3f
+                    %26obj=group
+                    %26decal
+                    %26src=is(
+                        tervisRender/16oz_base2%3f
+                        .BG
+                        %26layer=5
+                        %26anchor=0,0
+                        %26src=is(
+                            tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad
+                        )
+                    )
+                    %26show
+                    %26res=300
+                    %26req=object
+                    %26fmt=png-alpha
+                )
+                %26op_grow=-2
+            )
+            %26scl=1
+            %26layer=2
+            %26src=is(
+                tervisRender/mark_mask_v1%3f
+                %26layer=1
+                %26mask=is(
+                    tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11
+                )
+                %26scl=1
+            )
+            %26scl=1
+        )
+        %26scl=1
+        %26fmt=png8
+        %26quantize=adaptive,off,2,ffffff,00A99C
+    ')
+}
+&setAttr.imgMark={
+    source=@Embed(
+        'is(
+            tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11
+        )'
+    )
+    &imageres=300
+    &fmt=pdf,rgb
+    &.v=3284
+}
+
+@"
+http://images.tervis.com/is/image/tervis%3f
+        src=(
+            http://images.tervis.com/is/image/tervisRender/16oz_mark_mask%3f
+            %26layer=1
+            %26mask=is(
+                tervisRender%3f
+                %26src=ir(
+                    tervisRender/16_Warp_trans%3f
+                    %26obj=group
+                    %26decal
+                    %26src=is(
+                        tervisRender/16oz_base2%3f
+                        .BG
+                        %26layer=5
+                        %26anchor=0,0
+                        %26src=is(
+                            tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad
+                        )
+                    )
+                    %26show
+                    %26res=300
+                    %26req=object
+                    %26fmt=png-alpha
+                )
+                %26op_grow=-2
+            )
+            %26scl=1
+            %26layer=2
+            %26src=is(
+                tervisRender/mark_mask_v1%3f
+                %26layer=1
+                %26mask=is(
+                    tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11
+                )
+                %26scl=1
+            )
+            %26scl=1
+        )
+        %26scl=1
+        %26fmt=png8
+        %26quantize=adaptive,off,2,ffffff,00A99C
+"@ | remove-Whitespace
+
+
+http://images.tervis.com/is/agm/tervis/16_cstm_print_mark?&setAttr.imgWrap={source=@Embed(%27is(tervisRender/16oz_wrap_final%3flayer=1%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad))%26show%26res=300%26req=object%26fmt=png-alpha,rgb)%26fmt=png-alpha,rgb)%27)}&setAttr.maskWrap={source=@Embed(%27http://images.tervis.com/is/image/tervis%3fsrc=(http://images.tervis.com/is/image/tervisRender/16oz_mark_mask%3f%26layer=1%26mask=is(tervisRender%3f%26src=ir(tervisRender/16_Warp_trans%3f%26obj=group%26decal%26src=is(tervisRender/16oz_base2%3f.BG%26layer=5%26anchor=0,0%26src=is(tervis/prj-8d47321e-dfea-4f98-ae86-8a57c85a78ad))%26show%26res=300%26req=object%26fmt=png-alpha)%26op_grow=-2)%26scl=1%26layer=2%26src=is(tervisRender/mark_mask_v1%3f%26layer=1%26mask=is(tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11)%26scl=1)%26scl=1)%26scl=1%26fmt=png8%26quantize=adaptive,off,2,ffffff,00A99C%27)}
+&setAttr.imgMark={
+    source=@Embed(
+        %27is(
+            tervis/vum-8d47321e-dfea-4f98-ae86-8a57c85a78ad-66TU5O11
+        )
+        %27
+}
+&imageres=300
+&fmt=pdf,rgb
+&.v=3284
