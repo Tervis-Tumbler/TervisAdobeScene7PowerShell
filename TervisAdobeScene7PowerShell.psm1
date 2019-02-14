@@ -10,29 +10,29 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     $Scene7WebToPrintTemplateName = $RequestURI.Segments[-1]
     $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType -PrintImageTemplateName $Scene7WebToPrintTemplateName |
     ConvertTo-HashTable
+
+    $VuMarkID = $RequestURI.OriginalString |
+    Get-TervisVuMarkIDFromString 
     
-    $QueryStringParaemters = $RequestURI.Query | ConvertFrom-URLEncodedQueryStringParameterString
-
-    $VuMarkIDParameter = $RequestURI.OriginalString |
-    Get-TervisVuMarkIDFromString |
-    ConvertTo-HashTable
-
-    $OrderNumber = $QueryStringParaemters.'$OrderNum'
-    $OrderNumberParameter = if ($OrderNumber) {
-        @{
-            OrderNumber = $OrderNumber
-        }
+    $VuMarkIDParameter = if ($VuMarkID) {
+        @{VuMarkID = $VuMarkID}
     } else {
         @{}
     }
 
-    $TervisInDesignServerWebToPrintPDFContentParameters = @{
+    $QueryStringParaemters = $RequestURI.Query | ConvertFrom-URLEncodedQueryStringParameterString
+
+    $Parameters = @{
         ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
         WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
-        VuMarkImageURL = New-TervisAdobeScene7VuMarkImageURL @VuMarkIDParameter
+        VuMarkImageURL = if ($VuMarkID) {
+            New-TervisAdobeScene7VuMarkImageURL @VuMarkIDParameter
+        }
         Port = $Port
-    } + $SizeAndFormTypeParameter + $OrderNumberParameter
+        OrderNumber = $QueryStringParaemters.'$OrderNum'
+    } | Remove-HashtableKeysWithEmptyOrNullValues
 
+    $TervisInDesignServerWebToPrintPDFContentParameters = $Parameters + $SizeAndFormTypeParameter + $OrderNumberParameter
     Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
 }
 
@@ -42,9 +42,9 @@ function Get-TervisVuMarkIDFromString {
     )
     process {
         $InputString | 
-        ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<VuMarkID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}-?\w{8}}?)"
-        #  |
-        # Select-Object -ExpandProperty VuMarkID
+        ConvertFrom-StringUsingRegexCaptureGroup -Regex "(?<VuMarkID>{?\w{8}-?\w{4}-?\w{4}-?\w{4}-?\w{12}-?\w{8}}?)" |
+        Where-Object -FilterScript { $_.VuMarkID } |
+        Select-Object -ExpandProperty VuMarkID
     }
 }
 
@@ -64,14 +64,14 @@ function ConvertTo-AdobeScene7RelativeURL {
 
 function New-TervisAdobeScene7CustomyzerArtboardImageURL {
     param (
-        $ProjectID
+        [Parameter(Mandatory)]$ProjectID
     )
     "http://images.tervis.com/is/image/tervis/prj-$($ProjectID)?scl=1"
 }
 
 function New-TervisAdobeScene7VuMarkImageURL {
     param (
-        $VuMarkID
+        [Parameter(Mandatory)]$VuMarkID
     )
     "http://images.tervis.com/is/image/tervis/vum-$($VuMarkID)?scl=1&fmt=png-alpha,rgb"
 }
