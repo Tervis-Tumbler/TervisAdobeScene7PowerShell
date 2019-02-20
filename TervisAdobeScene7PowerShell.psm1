@@ -131,6 +131,7 @@ function New-TervisAdobeScene7FinalImageURL {
         [Parameter(Mandatory)]$FormType
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    if ($FormType -ne "SS") {
 @"
 http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Final)?
 layer=1&
@@ -155,6 +156,19 @@ src=ir(
 &scl=1
 &fmt=png-alpha,rgb
 "@ | Remove-WhiteSpace
+    } elseif ($FormType -eq "SS") {
+        @"
+http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+.BG
+&layer=5
+&anchor=0,0
+&src=is(
+    tervis/prj-$ProjectID
+)
+&scl=1
+&fmt=png-alpha,rgb
+"@ | Remove-WhiteSpace
+    }
 }
 
 function New-TervisAdobeScene7WhitInkImageURL {
@@ -167,7 +181,7 @@ function New-TervisAdobeScene7WhitInkImageURL {
         [Switch]$OldWay
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
-    if (-not $OldWay -and -not $VuMarkID) {
+    if (-not $OldWay -and -not $VuMarkID -and $FormType -ne "SS") {
 @"
 http://images.tervis.com/is/image/tervis?
 src=(
@@ -202,7 +216,7 @@ src=(
 &fmt=png,gray
 &quantize=adaptive,off,2,ffffff,$WhiteInkColorHex
 "@ | Remove-WhiteSpace
-    } elseif ($OldWay -and -not $VuMarkID) {
+    } elseif ($OldWay -and -not $VuMarkID -and $FormType -ne "SS") {
 @"
 http://images.tervis.com/is/image/tervis?
 src=(
@@ -236,7 +250,7 @@ src=(
 &fmt=png8
 &quantize=adaptive,off,2,ffffff,00A99C
 "@ | Remove-WhiteSpace
-    } elseif ($VuMarkID) {
+    } elseif ($VuMarkID -and $FormType -ne "SS") {
 @"
 http://images.tervis.com/is/image/tervis?
 src=(
@@ -279,6 +293,29 @@ src=(
 &scl=1
 &fmt=png8
 &quantize=adaptive,off,2,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    } elseif (-not $OldWay -and -not $VuMarkID -and $FormType -eq "SS") {
+@"
+http://images.tervis.com/is/image/tervis?
+src=(
+    http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Mask)?
+    &layer=1
+    &mask=is(
+        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+        .BG
+        &layer=5
+        &anchor=0,0
+        &src=is(
+            tervis/prj-$ProjectID
+        )
+    )
+    &scl=1
+)
+&op_grow=1
+&op_usm=5,250,255,0
+&scl=1
+&cache=off
+&fmt=png,gray
 "@ | Remove-WhiteSpace
     }
 }
