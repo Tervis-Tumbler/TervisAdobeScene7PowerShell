@@ -30,7 +30,7 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     } | Remove-HashtableKeysWithEmptyOrNullValues
 
     $TervisInDesignServerWebToPrintPDFContentParameters = $Parameters + $SizeAndFormTypeParameter
-    Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters -RemoteInDesignServer
+    Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
 }
 
 function Get-TervisVuMarkIDFromString {
