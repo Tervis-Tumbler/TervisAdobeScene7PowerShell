@@ -26,7 +26,7 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
         ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
         WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
         VuMarkImageURL = $(if ($VuMarkID) { New-TervisAdobeScene7VuMarkImageURL @VuMarkIDParameter })
-        OrderNumber = $QueryStringParaemters.'$OrderNum'
+        OrderNumber = $(if ($SizeAndFormTypeParameter.FormType -ne "SS") {$QueryStringParaemters.'$OrderNum'})
     } | Remove-HashtableKeysWithEmptyOrNullValues
 
     $TervisInDesignServerWebToPrintPDFContentParameters = $Parameters + $SizeAndFormTypeParameter
