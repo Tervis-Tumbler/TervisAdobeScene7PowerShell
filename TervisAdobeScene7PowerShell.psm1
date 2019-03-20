@@ -25,11 +25,47 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     $Parameters = @{
         ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
         WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
-        VuMarkImageURL = $(if ($VuMarkID) { New-TervisAdobeScene7VuMarkImageURL @VuMarkIDParameter })
+        VuMarkImageURL = $(if ($VuMarkID) { New-TervisAdobeScene7VuMarkImageURL -VuMarkID $VuMarkID -ProjectID $ProjectID })
         OrderNumber = $(if ($SizeAndFormTypeParameter.FormType -ne "SS") {$QueryStringParaemters.'$OrderNum'})
     } | Remove-HashtableKeysWithEmptyOrNullValues
 
     $TervisInDesignServerWebToPrintPDFContentParameters = $Parameters + $SizeAndFormTypeParameter
+    Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
+}
+
+function Get-TervisWebToPrintImage {
+    param (
+        #$ProjectID = "e5d6aaa1-f97e-4599-9a25-42d49b533409"
+        $ProjectID = "8d47321e-dfea-4f98-ae86-8a57c85a78ad"
+    )
+    #Set-CustomyzerModuleEnvironment -Name Production
+    Set-CustomyzerModuleEnvironment -Name Production
+    $Project = Get-CustomyzerProject -ProjectID $ProjectID
+    $FormType = $Project.Product.Form.FormType
+    $Size = $Project.Product.Form.Size
+    $SizeAndFormTypeParameter = @{
+        Size = $Size
+        FormType = $FormType
+    }
+    $VuMarkID = $Project.Project_ARAssetID.VumarkID
+
+    $VuMarkIDParameter = if ($VuMarkID) {
+        @{
+            VuMarkID = "$ProjectID-$($Project.Project_ARAssetID.VumarkID)"
+        }
+    } else {
+        @{}
+    }
+    
+    $Parameters = @{
+        ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
+        WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
+        VuMarkImageURL = $(if ($VuMarkID) { New-TervisAdobeScene7VuMarkImageURL @VuMarkIDParameter })
+        OrderNumber = $(if ($FormType -ne "SS") {$Project.OrderDetail.Order.ERPOrderNumber})
+    } | Remove-HashtableKeysWithEmptyOrNullValues
+
+    $TervisInDesignServerWebToPrintPDFContentParameters = $Parameters + $SizeAndFormTypeParameter
+
     Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
 }
 
@@ -68,9 +104,10 @@ function New-TervisAdobeScene7CustomyzerArtboardImageURL {
 
 function New-TervisAdobeScene7VuMarkImageURL {
     param (
+        [Parameter(Mandatory)]$ProjectID,
         [Parameter(Mandatory)]$VuMarkID
     )
-    "http://images.tervis.com/is/image/tervis/vum-$($VuMarkID)?scl=1&fmt=png-alpha,rgb"
+    "http://images.tervis.com/is/image/tervis/vum-$($ProjectID)-$($VuMarkID)?scl=1&fmt=png-alpha,rgb"
 }
 
 function New-TervisAdobeScene7BaseImageURL {
@@ -283,7 +320,7 @@ src=(
         tervisRender/mark_mask_v1?
         &layer=1
         &mask=is(
-            tervis/vum-$VuMarkID
+            tervis/vum-$ProjectID-$VuMarkID
         )
         &scl=1
     )
