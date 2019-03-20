@@ -35,11 +35,8 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
 
 function Get-TervisWebToPrintImage {
     param (
-        #$ProjectID = "e5d6aaa1-f97e-4599-9a25-42d49b533409"
-        $ProjectID = "8d47321e-dfea-4f98-ae86-8a57c85a78ad"
+        [Parameter(Mandatory)]$ProjectID
     )
-    #Set-CustomyzerModuleEnvironment -Name Production
-    Set-CustomyzerModuleEnvironment -Name Production
     $Project = Get-CustomyzerProject -ProjectID $ProjectID
     $FormType = $Project.Product.Form.FormType
     $Size = $Project.Product.Form.Size
