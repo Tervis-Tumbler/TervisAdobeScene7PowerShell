@@ -6,31 +6,33 @@ function Get-TervisWebToPrintImageFromAdobeScene7WebToPrintURL {
     )
     $ProjectID = $RequestURI.OriginalString |
     Get-GuidFromString
+
+    Get-TervisWebToPrintImage -ProjectID $ProjectID
     
-    $Scene7WebToPrintTemplateName = $RequestURI.Segments[-1]
-    $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType -PrintImageTemplateName $Scene7WebToPrintTemplateName |
-    ConvertTo-HashTable
+    # $Scene7WebToPrintTemplateName = $RequestURI.Segments[-1]
+    # $SizeAndFormTypeParameter = Get-CustomyzerPrintImageTemplateSizeAndFormType -PrintImageTemplateName $Scene7WebToPrintTemplateName |
+    # ConvertTo-HashTable
 
-    $VuMarkID = $RequestURI.OriginalString |
-    Get-TervisVuMarkIDFromString 
+    # $VuMarkID = $RequestURI.OriginalString |
+    # Get-TervisVuMarkIDFromString 
     
-    $VuMarkIDParameter = if ($VuMarkID) {
-        @{VuMarkID = $VuMarkID}
-    } else {
-        @{}
-    }
+    # $VuMarkIDParameter = if ($VuMarkID) {
+    #     @{VuMarkID = $VuMarkID}
+    # } else {
+    #     @{}
+    # }
 
-    $QueryStringParaemters = $RequestURI.Query | ConvertFrom-URLEncodedQueryStringParameterString
+    # $QueryStringParaemters = $RequestURI.Query | ConvertFrom-URLEncodedQueryStringParameterString
 
-    $Parameters = @{
-        ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
-        WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
-        VuMarkImageURL = $(if ($VuMarkID) { New-TervisAdobeScene7VuMarkImageURL -VuMarkID $VuMarkID -ProjectID $ProjectID })
-        OrderNumber = $(if ($SizeAndFormTypeParameter.FormType -ne "SS") {$QueryStringParaemters.'$OrderNum'})
-    } | Remove-HashtableKeysWithEmptyOrNullValues
+    # $Parameters = @{
+    #     ColorImageURL = New-TervisAdobeScene7FinalImageURL @SizeAndFormTypeParameter -ProjectID $ProjectID
+    #     WhiteInkImageURL = New-TervisAdobeScene7WhitInkImageURL -WhiteInkColorHex 000000 @SizeAndFormTypeParameter -ProjectID $ProjectID @VuMarkIDParameter
+    #     VuMarkImageURL = $(if ($VuMarkID) { New-TervisAdobeScene7VuMarkImageURL -VuMarkID $VuMarkID -ProjectID $ProjectID })
+    #     OrderNumber = $(if ($SizeAndFormTypeParameter.FormType -ne "SS") {$QueryStringParaemters.'$OrderNum'})
+    # } | Remove-HashtableKeysWithEmptyOrNullValues
 
-    $TervisInDesignServerWebToPrintPDFContentParameters = $Parameters + $SizeAndFormTypeParameter
-    Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
+    # $TervisInDesignServerWebToPrintPDFContentParameters = $Parameters + $SizeAndFormTypeParameter
+    # Get-TervisWebToPrintInDesignServerPDFContent @TervisInDesignServerWebToPrintPDFContentParameters
 }
 
 function Get-TervisWebToPrintImage {
