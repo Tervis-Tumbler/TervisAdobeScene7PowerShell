@@ -656,5 +656,5 @@ function Invoke-TervisAdobeScene7ImagePresetAnalysis {
     $Objects |
     Sort-Object -Property Name |
     Select-Object -Property (@("Name")+$PropertyNames) -ErrorAction SilentlyContinue |
-    Format-Table
+    Format-Table -Property *
 }
