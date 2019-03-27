@@ -636,3 +636,17 @@ function Out-TervisAdobeScene7UrlPrettyPrint {
         $URLExpanded | Out-AdobeScene7UrlPrettyPrint
     }
 }
+
+function Invoke-TervisAdobeScene7ImagePresetAnalysis {
+    $Objects = $TervisAdobeScene7ImagePresets.tervisRender.keys |
+    ForEach-Object {
+        $TervisAdobeScene7ImagePresets.tervisRender."$_" |
+        ConvertFrom-URLEncodedQueryStringParameterString |
+        Add-Member -MemberType NoteProperty -Name Name -Value $_ -Force -PassThru 
+    }
+    
+    $Objects |
+    Sort-Object -Property Name |
+    Select-Object -Property Name,* -ErrorAction SilentlyContinue |
+    Format-Table
+}
