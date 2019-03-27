@@ -644,9 +644,17 @@ function Invoke-TervisAdobeScene7ImagePresetAnalysis {
         ConvertFrom-URLEncodedQueryStringParameterString |
         Add-Member -MemberType NoteProperty -Name Name -Value $_ -Force -PassThru 
     }
-    
+
+    $PropertyNames = $Objects | 
+    % { 
+        $_.psobject.Properties |
+        Select-Object -ExpandProperty Name
+    } | 
+    Sort-Object -Unique |
+    Where-Object { $_ -ne "Name" }
+
     $Objects |
     Sort-Object -Property Name |
-    Select-Object -Property Name,* -ErrorAction SilentlyContinue |
+    Select-Object -Property (@("Name")+$PropertyNames) -ErrorAction SilentlyContinue |
     Format-Table
 }
