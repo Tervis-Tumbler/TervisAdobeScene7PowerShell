@@ -290,7 +290,7 @@ src=(
 )
 &scl=1
 &fmt=png8
-&quantize=adaptive,off,2,ffffff,00A99C
+&quantize=adaptive,off,2,ffffff,$WhiteInkColorHex
 "@ | Remove-WhiteSpace
     } elseif ($VuMarkID -and $FormType -ne "SS") {
 @"
@@ -333,8 +333,8 @@ src=(
     &scl=1
 )
 &scl=1
-&fmt=png8
-&quantize=adaptive,off,2,ffffff,00A99C
+&fmt=png,gray
+&quantize=adaptive,off,2,ffffff,$WhiteInkColorHex
 "@ | Remove-WhiteSpace
     } elseif (-not $OldWay -and -not $VuMarkID -and $FormType -eq "SS") {
 @"
