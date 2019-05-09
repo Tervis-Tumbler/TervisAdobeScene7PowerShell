@@ -84,13 +84,13 @@ layer=0&size=2767,1640&color=ffffff&opac=0&layer=1&src=tervisRender/1182577&size
 `$img-src2=tervisRender/10oz_blank&`$ordersize=600,101&`$orderhide=1&layer=0&size=2521,1542&anchor=0,0&layer=1&src=`$img-src2`$&size=2521,1542&pos=1260,771&layer=9999&src=is{tervisRender/logo_ordernum}&size=`$ordersize`$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=`$orderhide`$&pos=50,1488
 "@ | Remove-WhiteSpace
     "16oz_wrap_final" = @"
-    layer=0&size=3084,1873&color=ffffff&opac=0&layer=1&src=tervisRender/1154195&size=3084,1873&$orderhide=1
+    layer=0&size=3084,1873&color=ffffff&opac=0&layer=1&src=tervisRender/1154195&size=3084,1873&`$orderhide=1
 "@ | Remove-WhiteSpace
     "16oz_wrap_mask" = @"
 `$orderhide=1&layer=0&size=3084,1873&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
 "@ | Remove-WhiteSpace
     "16oz_base2" = @"
-$img-src2=tervisRender/16oz_blank&$ordersize=600,101&$orderhide=1&layer=0&size=2717,1750&anchor=0,0&layer=1&src=$img-src2$&anchor=0,0&layer=9999&src=is{tervisRender/logo_ordernum}&size=$ordersize$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=$orderhide$&pos=50,1696
+`$img-src2=tervisRender/16oz_blank&`$ordersize=600,101&`$orderhide=1&layer=0&size=2717,1750&anchor=0,0&layer=1&src=`$img-src2`$&anchor=0,0&layer=9999&src=is{tervisRender/logo_ordernum}&size=`$ordersize`$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=`$orderhide`$&pos=50,1696
 "@ | Remove-WhiteSpace
     "MUG_wrap_final" = @"
 layer=0&size=3628,1339&color=ffffff&opac=0&layer=1&src=tervisRender/1247990&size=3628,1339
@@ -99,51 +99,51 @@ layer=0&size=3628,1339&color=ffffff&opac=0&layer=1&src=tervisRender/1247990&size
 `$orderhide=1&layer=0&size=3628,1339&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
 "@ | Remove-WhiteSpace
     "MUG_base2" = @"
-`$img-src2=tervisRender/MUG_blank&$ordersize=483,82&$orderhide=1&layer=0&size=2961,1094&anchor=0,0&layer=1&src=$img-src2$&size=2961,1094&pos=1480,547&layer=9999&src=is{tervisRender/logo_ordernum}&size=$ordersize$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=$orderhide$&pos=150,1062
+`$img-src2=tervisRender/MUG_blank&`$ordersize=483,82&`$orderhide=1&layer=0&size=2961,1094&anchor=0,0&layer=1&src=`$img-src2`$&size=2961,1094&pos=1480,547&layer=9999&src=is{tervisRender/logo_ordernum}&size=`$ordersize`$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=`$orderhide`$&pos=150,1062
 "@ | Remove-WhiteSpace
     "BEER_wrap_final" = @"
-layer=0&size=3074,1748&color=ffffff&opac=0&$orderhide=1&layer=1&src=tervisRender/LND17404_V1G_BrewBeerMug_16_120417&size=3074,1748
+layer=0&size=3074,1748&color=ffffff&opac=0&`$orderhide=1&layer=1&src=tervisRender/LND17404_V1G_BrewBeerMug_16_120417&size=3074,1748
 "@ | Remove-WhiteSpace
     "BEER_wrap_mask" = @"
-$orderhide=1&layer=0&size=3074,1748&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+`$orderhide=1&layer=0&size=3074,1748&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
 "@ | Remove-WhiteSpace
     "BEER_base2" = @"
-devmode=true&$orderhide=1&$ordersize=2613,1614&$img-src2=tervisRender/BEER-blank&layer=0&size=2625,1620&anchor=0,0&layer=1&src=$img-src2$&size=2625,1620&pos=1312,810&layer=9999&src=tervisRender/beer_logo_ordernum_030118&size=$ordersize$&pos=1312,810&hide=$orderhide$
+devmode=true&`$orderhide=1&`$ordersize=2613,1614&`$img-src2=tervisRender/BEER-blank&layer=0&size=2625,1620&anchor=0,0&layer=1&src=`$img-src2`$&size=2625,1620&pos=1312,810&layer=9999&src=tervisRender/beer_logo_ordernum_030118&size=`$ordersize`$&pos=1312,810&hide=`$orderhide`$
 "@ | Remove-WhiteSpace
     "24oz_wrap_final" = @"
     layer=0&size=3574,2402&color=ffffff&opac=0&layer=1&src=tervisRender/1036191&size=3575,2402
 "@ | Remove-WhiteSpace
     "24oz_wrap_mask" = @"
-    $orderhide=1&layer=0&size=3574,2402&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+    `$orderhide=1&layer=0&size=3574,2402&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
 "@ | Remove-WhiteSpace
     "24oz_base2" = @"
-    devmode=true&$img-src2=tervisRender/24oz_blank&$ordersize=600,101&$orderhide=1&layer=0&size=2965,2219&anchor=0,0&layer=1&src=$img-src2$&anchor=0,0&layer=9999&src=is{tervisRender/logo_ordernum}&size=$ordersize$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=$orderhide$&pos=50,2165
+    devmode=true&`$img-src2=tervisRender/24oz_blank&`$ordersize=600,101&`$orderhide=1&layer=0&size=2965,2219&anchor=0,0&layer=1&src=`$img-src2`$&anchor=0,0&layer=9999&src=is{tervisRender/logo_ordernum}&size=`$ordersize`$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=`$orderhide`$&pos=50,2165
 "@ | Remove-WhiteSpace
     "WB_wrap_final" = @"
     layer=0&size=2977,2420&color=ffffff&opac=0&layer=1&src=tervisRender/1102264&size=3107,2420
 "@ | Remove-WhiteSpace
     "WB_wrap_mask" = @"
-    $orderhide=1&layer=0&size=2977,2420&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+    `$orderhide=1&layer=0&size=2977,2420&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
 "@ | Remove-WhiteSpace
     "WB_base2" = @"
-    devmode=true&$img-src2=tervisRender/WB_blank&$ordersize=600,101&$orderhide=1&layer=0&size=2679,2279&anchor=0,0&layer=1&src=$img-src2$&anchor=0,0&layer=9999&src=is{tervisRender/logo_ordernum}&size=$ordersize$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=$orderhide$&pos=50,2181
+    devmode=true&`$img-src2=tervisRender/WB_blank&`$ordersize=600,101&`$orderhide=1&layer=0&size=2679,2279&anchor=0,0&layer=1&src=`$img-src2`$&anchor=0,0&layer=9999&src=is{tervisRender/logo_ordernum}&size=`$ordersize`$&rotate=90&posN=0,1&anchorn=0.5,0.5&hide=`$orderhide`$&pos=50,2181
 "@ | Remove-WhiteSpace
     "SS_30oz_wrap_mask" = @"
-    $orderhide=1&layer=0&size=3395,2409&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
+    `$orderhide=1&layer=0&size=3395,2409&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
 "@ | Remove-WhiteSpace
     "SS_30oz_base2" = @"
-    devmode=true&$logohide=1&$img-src2=tervisRender/SIC30Blank&$orderhide=1&layer=0&size=3395,2409&anchor=0,0&layer=1&src=$img-src2$&size=3395,2409&pos=1697,1204&layer=1002&src=tervisRender/SIC-logo-transparent&size=480,194&pos=18,365&hide=$logohide$&layer=1003&src=tervisRender/SIC-logo-transparent&size=480,194&pos=3408,365&hide=$logohide$&layer=1004&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=0,2267&hide=$orderhide$&layer=1005&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=3395,2267&hide=$orderhide$&rotate=0
+    devmode=true&`$logohide=1&`$img-src2=tervisRender/SIC30Blank&`$orderhide=1&layer=0&size=3395,2409&anchor=0,0&layer=1&src=`$img-src2`$&size=3395,2409&pos=1697,1204&layer=1002&src=tervisRender/SIC-logo-transparent&size=480,194&pos=18,365&hide=`$logohide`$&layer=1003&src=tervisRender/SIC-logo-transparent&size=480,194&pos=3408,365&hide=`$logohide`$&layer=1004&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=0,2267&hide=`$orderhide`$&layer=1005&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=3395,2267&hide=`$orderhide`$&rotate=0
 "@ | Remove-WhiteSpace
     "SS_20oz_wrap_mask" = @"
-    $orderhide=1&layer=0&size=2974,2032&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
+    `$orderhide=1&layer=0&size=2974,2032&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
 "@ | Remove-WhiteSpace
     "SS_20oz_base2" = @"
-    devmode=true&$orderhide=1&$logohide=1&$img-src2=tervisRender/SIC20Blank&layer=0&size=2974,2032&anchor=0,0&layer=1&src=$img-src2$&size=2974,2032&pos=1487,1016&layer=1002&src=tervisRender/SIC-logo-transparent&size=429,173&pos=18,285&hide=$logohide$&layer=1003&src=tervisRender/SIC-logo-transparent&size=429,173&pos=2985,285&hide=$logohide$&layer=1004&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=0,1916&hide=$orderhide$&layer=1005&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=2974,1916&hide=$orderhide$
+    devmode=true&`$orderhide=1&`$logohide=1&`$img-src2=tervisRender/SIC20Blank&layer=0&size=2974,2032&anchor=0,0&layer=1&src=`$img-src2`$&size=2974,2032&pos=1487,1016&layer=1002&src=tervisRender/SIC-logo-transparent&size=429,173&pos=18,285&hide=`$logohide`$&layer=1003&src=tervisRender/SIC-logo-transparent&size=429,173&pos=2985,285&hide=`$logohide`$&layer=1004&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=0,1916&hide=`$orderhide`$&layer=1005&src=tervisRender/tervislogo-white-customyzer&size=456,110&pos=2974,1916&hide=`$orderhide`$
 "@ | Remove-WhiteSpace
     "SS_24oz_wrap_mask" = @"
-    $orderhide=1&layer=0&size=2916,2367&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
+    `$orderhide=1&layer=0&size=2916,2367&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
 "@ | Remove-WhiteSpace
     "SS_24oz_base2" = @"
-    $img-src2=tervisRender/24SS_blank&$orderhide=1&layer=0&size=2916,2367&anchor=0,0&layer=1&src=$img-src2$&size=2916,2367&pos=1458,1183&layer=2&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=0,2264&hide=$orderhide$&layer=3&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=2916,2264&hide=$orderhide$
+    `$img-src2=tervisRender/24SS_blank&`$orderhide=1&layer=0&size=2916,2367&anchor=0,0&layer=1&src=`$img-src2`$&size=2916,2367&pos=1458,1183&layer=2&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=0,2264&hide=`$orderhide`$&layer=3&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=2916,2264&hide=`$orderhide`$
 "@ | Remove-WhiteSpace
 }
