@@ -133,7 +133,7 @@ http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName
 &src=is(
     tervis/prj-$ProjectID
     )
-&scl=1"
+&scl=1
 "@ | Remove-WhiteSpace
 }
 
@@ -605,7 +605,6 @@ Replace-ContentValue -OldValue "?" -NewValue "%3f"
     $ImageURL
 }
 
-
 function Expand-TervisAdobeScene7ImagePresetInString {
     param (
         [Parameter(Mandatory,ValueFromPipeline)]$String
@@ -620,6 +619,22 @@ function Expand-TervisAdobeScene7ImagePresetInString {
         foreach ($Preset in $ImagePresets.Keys) {
             $String = $String |
             Replace-ContentValue -OldValue "`$$Preset`$" -NewValue $ImagePresets.$Preset
+        }
+    }
+    end {
+        $String
+    }
+}
+
+function Expand-TervisAdobeScene7ImageTemplateInString {
+    param (
+        [Parameter(Mandatory,ValueFromPipeline)]$String
+    )
+    process {
+        foreach ($Template in $Templates.Keys) {
+            # $String = $String -replace "([\/]$Template[?])" , "?$($Templates."$Template")&"
+            $String = $String |
+            Replace-ContentValue -OldValue "/$($Template)?" -NewValue "?$($Templates.$Template)&"
         }
     }
     end {
