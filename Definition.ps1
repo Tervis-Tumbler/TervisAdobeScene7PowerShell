@@ -147,3 +147,96 @@ devmode=true&`$orderhide=1&`$ordersize=2613,1614&`$img-src2=tervisRender/BEER-bl
     `$img-src2=tervisRender/24SS_blank&`$orderhide=1&layer=0&size=2916,2367&anchor=0,0&layer=1&src=`$img-src2`$&size=2916,2367&pos=1458,1183&layer=2&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=0,2264&hide=`$orderhide`$&layer=3&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=2916,2264&hide=`$orderhide`$
 "@ | Remove-WhiteSpace
 }
+
+$TemplatesWithoutOrderNumberAndDefaultImages = @{
+    "6oz_wrap_final" = @"
+layer=0&size=2605,1051&color=ffffff&opac=0&layer=1&src=tervisRender/1155658&size=2605,1051
+"@ | Remove-WhiteSpace
+    "6oz_wrap_mask" = @"
+`$orderhide=1&layer=0&size=2605,1051&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "6oz_base2" = @"
+`layer=0&size=2298,811&anchor=0,0&layer=1&size=2298,811&pos=1149,405
+"@ | Remove-WhiteSpace
+    "9oz_wrap_final" = @"
+layer=0&size=3260,962&color=ffffff&opac=0&`$orderhide=1&layer=1&src=tervisRender/1224729&size=3260,962
+"@ | Remove-WhiteSpace
+    "9oz_wrap_mask" = @"
+`$orderhide=1&layer=0&size=3260,962&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "9oz_base2" = @"
+layer=0&size=2870,757&anchor=0,0&layer=1&anchor=0,0
+"@ | Remove-WhiteSpace
+    "10oz_wrap_final" = @"
+    layer=0&size=2764,1640&color=ffffff&opac=0&layer=1&src=tervisRender/1182577&size=2764,1640&`$orderhide=1
+"@ | Remove-WhiteSpace
+    "10oz_wrap_mask" = @"
+    `$orderhide=1&layer=0&size=2764,1640&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "10oz_base2" = @"
+layer=0&size=2521,1542&anchor=0,0&layer=1&size=2521,1542&pos=1260,771
+"@ | Remove-WhiteSpace
+    "16oz_wrap_final" = @"
+    layer=0&size=3084,1873&color=ffffff&opac=0&layer=1&src=tervisRender/1154195&size=3084,1873&`$orderhide=1
+"@ | Remove-WhiteSpace
+    "16oz_wrap_mask" = @"
+`$orderhide=1&layer=0&size=3084,1873&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "16oz_base2" = @"
+layer=0&size=2717,1750&anchor=0,0&layer=1&anchor=0,0
+"@ | Remove-WhiteSpace
+    "MUG_wrap_final" = @"
+layer=0&size=3628,1339&color=ffffff&opac=0&layer=1&src=tervisRender/1247990&size=3628,1339
+"@ | Remove-WhiteSpace
+    "MUG_wrap_mask" = @"
+`$orderhide=1&layer=0&size=3628,1339&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "MUG_base2" = @"
+layer=0&size=2961,1094&anchor=0,0&layer=1&size=2961,1094&pos=1480,547
+"@ | Remove-WhiteSpace
+    "BEER_wrap_final" = @"
+layer=0&size=3074,1748&color=ffffff&opac=0&`$orderhide=1&layer=1&src=tervisRender/LND17404_V1G_BrewBeerMug_16_120417&size=3074,1748
+"@ | Remove-WhiteSpace
+    "BEER_wrap_mask" = @"
+`$orderhide=1&layer=0&size=3074,1748&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "BEER_base2" = @"
+&layer=0&size=2625,1620&anchor=0,0&layer=1&size=2625,1620&pos=1312,810
+"@ | Remove-WhiteSpace
+    "24oz_wrap_final" = @"
+    layer=0&size=3574,2402&color=ffffff&opac=0&layer=1&src=tervisRender/1036191&size=3574,2402
+"@ | Remove-WhiteSpace
+    "24oz_wrap_mask" = @"
+    `$orderhide=1&layer=0&size=3574,2402&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "24oz_base2" = @"
+    layer=0&size=2965,2219&anchor=0,0&layer=1&anchor=0,0
+"@ | Remove-WhiteSpace
+    "WB_wrap_final" = @"
+    layer=0&size=2977,2420&color=ffffff&opac=0&layer=1&src=tervisRender/waterbottle_placeholder&size=2977,2420
+"@ | Remove-WhiteSpace
+    "WB_wrap_mask" = @"
+    `$orderhide=1&layer=0&size=2977,2420&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "WB_base2" = @"
+    layer=0&size=2679,2279&anchor=0,0&layer=1&anchor=0,0
+"@ | Remove-WhiteSpace
+    "SS_30oz_wrap_mask" = @"
+    `$orderhide=1&layer=0&size=3395,2409&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
+"@ | Remove-WhiteSpace
+    "SS_30oz_base2" = @"
+    layer=0&size=3395,2409&anchor=0,0&layer=1&size=3395,2409&pos=1697,1204
+"@ | Remove-WhiteSpace
+    "SS_20oz_wrap_mask" = @"
+    `$orderhide=1&layer=0&size=2974,2032&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
+"@ | Remove-WhiteSpace
+    "SS_20oz_base2" = @"
+    layer=0&size=2974,2032&anchor=0,0&layer=1&size=2974,2032&pos=1487,1016
+"@ | Remove-WhiteSpace
+    "SS_24oz_wrap_mask" = @"
+    `$orderhide=1&layer=0&size=2916,2367&layer=1&sizeN=1,1&color=000000&quantize=adaptive,off,2,ffffff,000000
+"@ | Remove-WhiteSpace
+    "SS_24oz_base2" = @"
+    layer=0&size=2916,2367&anchor=0,0&layer=1&size=2916,2367&pos=1458,1183
+"@ | Remove-WhiteSpace
+}
