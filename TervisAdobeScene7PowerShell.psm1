@@ -152,34 +152,31 @@ function New-TervisAdobeScene7CustomyzerArtboardProofImageURL {
 
     $MaskedAreasColorHex = "636567cf"
 
-    $RelativeURL = if ($Size -eq 16 -and $FormType -eq "DWT") {
-        $WidthOfVerticalBar = 30
-@"
+    $RelativeURL = @"
 tervis/prj-$($ProjectID)?
-&layer=1
-&originN=0.5,0
-&posN=0.5,0
-&size=$WidthOfVerticalBar,$($ArtBoardDimensions.Height)
-&color=$MaskedAreasColorHex
-"@ | Remove-WhiteSpace
-    } elseif ($Size -eq 24 -and $FormType -eq "DWT") {
-        $WidthOfVerticalBar = 30
-        $HeightOfHorizontalBar = 90
-
+$(
+    if($ProofMaskDimensions.VerticalBar) {
         @"
-tervis/prj-$($ProjectID)?
 &layer=1
 &originN=0.5,0
 &posN=0.5,0
-&size=$WidthOfVerticalBar,$($ArtBoardDimensions.Height)
+&size=$($ProofMaskDimensions.VerticalBar.Width),$($ArtBoardDimensions.Height)
 &color=$MaskedAreasColorHex
+"@
+    }
+)
+$(
+    if($ProofMaskDimensions.HorizontalBar) {
+        @"
 &layer=2
 &originN=0.5,0
 &posN=0.5,.067
-&size=$($ArtBoardDimensions.Width),$HeightOfHorizontalBar
+&size=$($ArtBoardDimensions.Width),$($ProofMaskDimensions.HorizontalBar.Height)
 &color=$MaskedAreasColorHex
-"@ | Remove-WhiteSpace
+"@
     }
+)
+"@ | Remove-WhiteSpace
 
     if ($AsRelativeURL) {
         $RelativeURL
