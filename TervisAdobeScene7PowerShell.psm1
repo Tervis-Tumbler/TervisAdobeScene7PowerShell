@@ -108,6 +108,90 @@ function New-TervisAdobeScene7CustomyzerArtboardImageURL {
     "http://images.tervis.com/is/image/tervis/prj-$($ProjectID)?scl=1"
 }
 
+function New-TervisAdobeScene7VignetteProofImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType
+    )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+
+    @"
+http://images.tervis.com/ir/render/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
+    &obj=group
+    &decal
+    &src=is(
+        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+        .BG
+        &layer=5
+        &anchor=0,0
+        &src=is(
+            $(New-TervisAdobeScene7CustomyzerArtboardProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsRelativeURL)
+        )
+    )
+    &show
+    &res=300
+    &req=object
+    &fmt=png-alpha,rgb
+    &scl=1
+"@ | Remove-WhiteSpace
+}
+
+function New-TervisAdobeScene7CustomyzerArtboardProofImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType,
+        [Switch]$AsRelativeURL
+    )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    
+    $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
+    $ArtBoardDimensions = $CustomyzerSizeAndFormTypeMetaData.ArtBoardDimensions
+    $ProofMaskDimensions = $CustomyzerSizeAndFormTypeMetaData.ProofMaskDimensions
+
+    $MaskedAreasColorHex = "636567cf"
+
+    $RelativeURL = if ($Size -eq 16 -and $FormType -eq "DWT") {
+        $WidthOfVerticalBar = 30
+@"
+tervis/prj-$($ProjectID)?
+&layer=1
+&originN=0.5,0
+&posN=0.5,0
+&size=$WidthOfVerticalBar,$($ArtBoardDimensions.Height)
+&color=$MaskedAreasColorHex
+"@ | Remove-WhiteSpace
+    } elseif ($Size -eq 24 -and $FormType -eq "DWT") {
+        $WidthOfVerticalBar = 30
+        $HeightOfHorizontalBar = 90
+
+        @"
+tervis/prj-$($ProjectID)?
+&layer=1
+&originN=0.5,0
+&posN=0.5,0
+&size=$WidthOfVerticalBar,$($ArtBoardDimensions.Height)
+&color=$MaskedAreasColorHex
+&layer=2
+&originN=0.5,0
+&posN=0.5,.067
+&size=$($ArtBoardDimensions.Width),$HeightOfHorizontalBar
+&color=$MaskedAreasColorHex
+"@ | Remove-WhiteSpace
+    }
+
+    if ($AsRelativeURL) {
+        $RelativeURL
+    } else {
+        @"
+http://images.tervis.com/is/image/$RelativeURL
+&scl=1
+&fmt=png-alpha
+"@ | Remove-WhiteSpace
+    }
+}
+
 function New-TervisAdobeScene7VuMarkImageURL {
     param (
         [Parameter(Mandatory)]$ProjectID,
