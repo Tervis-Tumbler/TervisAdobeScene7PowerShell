@@ -108,6 +108,52 @@ function New-TervisAdobeScene7CustomyzerArtboardImageURL {
     "http://images.tervis.com/is/image/tervis/prj-$($ProjectID)?scl=1"
 }
 
+function New-TervisAdobeScene7CustomyzerProjectProofImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType,
+        [Switch]$AsRelativeURL
+    )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
+    $PrintImageDimensions = $CustomyzerSizeAndFormTypeMetaData.PrintImageDimensions
+    @"
+http://images.tervis.com/is/image/tervis?
+&layer=0
+&size=$($PrintImageDimensions.Width),$($PrintImageDimensions.Height)
+&layer=1
+&src=($(New-TervisAdobeScene7VignetteProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID))
+&layer=2
+&src=is($(New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL @GetTemplateNameParameters -AsRelativeURL))
+&scl=1
+&fmt=png-alpha
+"@ | Remove-WhiteSpace
+}
+
+function New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL {
+    param (
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType,
+        [Switch]$AsRelativeURL
+    )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+
+    $RelativeURL = @"
+tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType DiecutterCalibrationCheckLine)
+"@ | Remove-WhiteSpace
+
+    if ($AsRelativeURL) {
+        $RelativeURL
+    } else {
+        @"
+http://images.tervis.com/is/image/$($RelativeURL)?
+scl=1
+&fmt=png-alpha
+"@ | Remove-WhiteSpace
+    }
+}
+
 function New-TervisAdobeScene7VignetteProofImageURL {
     param (
         [Parameter(Mandatory)]$ProjectID,
@@ -118,22 +164,22 @@ function New-TervisAdobeScene7VignetteProofImageURL {
 
     @"
 http://images.tervis.com/ir/render/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
-    &obj=group
-    &decal
+&obj=group
+&decal
+&src=is(
+    tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+    .BG
+    &layer=5
+    &anchor=0,0
     &src=is(
-        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
-        .BG
-        &layer=5
-        &anchor=0,0
-        &src=is(
-            $(New-TervisAdobeScene7CustomyzerArtboardProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsRelativeURL)
-        )
+        $(New-TervisAdobeScene7CustomyzerArtboardProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsRelativeURL)
     )
-    &show
-    &res=300
-    &req=object
-    &fmt=png-alpha,rgb
-    &scl=1
+)
+&show
+&res=300
+&req=object
+&fmt=png-alpha,rgb
+&scl=1
 "@ | Remove-WhiteSpace
 }
 
@@ -154,6 +200,8 @@ function New-TervisAdobeScene7CustomyzerArtboardProofImageURL {
 
     $RelativeURL = @"
 tervis/prj-$($ProjectID)?
+&layer=0
+&bgColor=e6e7e8
 $(
     if($ProofMaskDimensions.VerticalBar) {
         @"
