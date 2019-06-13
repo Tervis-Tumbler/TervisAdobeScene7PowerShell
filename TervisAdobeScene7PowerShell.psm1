@@ -661,6 +661,27 @@ function Get-TervisAdobeScence7ImageURLFromOrderDetail {
     }
 }
 
+function Get-TervisAdboeScene7CustomyzerTervisLogoImageURL {
+    param (
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType
+    )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+
+    @"
+https://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+`$orderhide=0
+&layer=9999
+&clipPath=
+    M 0,300
+    l200,0 
+    l0,400 
+    l-200,0
+&fmt=png-alpha
+&scl=1
+"@
+}
+
 function Get-TervisAdobeScence7ImageURL {
     param (
         $ERPOrderNumber,
@@ -780,7 +801,7 @@ layer=0
 "@
         } elseif ($WhiteInk) {
 @"
-http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType WhiteInkMask)?
+https://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType WhiteInkMask)?
 &layer=1
 &mask=is(
     tervisRender?
