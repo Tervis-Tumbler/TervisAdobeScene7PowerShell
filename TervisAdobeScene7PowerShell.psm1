@@ -131,6 +131,32 @@ http://images.tervis.com/is/image/tervis?
 "@ | Remove-WhiteSpace
 }
 
+function New-TervisAdobeScene7CustomyzerProjectVirtualProofImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType,
+        $Scale = 1,
+        [Switch]$AsRelativeURL
+    )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
+    $PrintImageDimensions = $CustomyzerSizeAndFormTypeMetaData.PrintImageDimensions
+    @"
+http://images.tervis.com/is/image/tervis?
+&layer=0
+&size=$($PrintImageDimensions.Width),$($PrintImageDimensions.Height)
+&layer=1
+&src=($(New-TervisAdobeScene7VignetteImageURL @GetTemplateNameParameters -ArtBoardImageScene7RelativeURL (
+    -ProjectID $ProjectID
+) ))
+&layer=2
+&src=is($(New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL @GetTemplateNameParameters -AsRelativeURL))
+&scl=$Scale
+&fmt=png-alpha
+"@ | Remove-WhiteSpace
+}
+
 function New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL {
     param (
         [Parameter(Mandatory)]$Size,
@@ -161,26 +187,9 @@ function New-TervisAdobeScene7VignetteProofImageURL {
         [Parameter(Mandatory)]$FormType
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
-
-    @"
-http://images.tervis.com/ir/render/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
-&obj=group
-&decal
-&src=is(
-    tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
-    .BG
-    &layer=5
-    &anchor=0,0
-    &src=is(
-        $(New-TervisAdobeScene7CustomyzerArtboardProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsRelativeURL)
+    New-TervisAdobeScene7VignetteImageURL @GetTemplateNameParameters -ArtBoardImageScene7RelativeURL (
+        New-TervisAdobeScene7CustomyzerArtboardProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsRelativeURL
     )
-)
-&show
-&res=300
-&req=object
-&fmt=png-alpha,rgb
-&scl=1
-"@ | Remove-WhiteSpace
 }
 
 function New-TervisAdobeScene7CustomyzerArtboardProofImageURL {
@@ -227,7 +236,7 @@ $(
 "@ | Remove-WhiteSpace
 
     if ($AsRelativeURL) {
-        $RelativeURL
+        "is($RelativeURL)"
     } else {
         @"
 http://images.tervis.com/is/image/$RelativeURL
@@ -268,31 +277,48 @@ http://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName
 
 function New-TervisAdobeScene7VignetteImageURL {
     param (
-        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory,ParameterSetName="ProjectID")]$ProjectID,
+        [Parameter(Mandatory,ParameterSetName="ArtBoardImageScene7RelativeURL")]$ArtBoardImageScene7RelativeURL,
+        [Parameter(Mandatory,ParameterSetName="ArtBoardImageAbsoluteURL")]$ArtBoardImageAbsoluteURL,
         [Parameter(Mandatory)]$Size,
-        [Parameter(Mandatory)]$FormType
+        [Parameter(Mandatory)]$FormType,
+        [Switch]$AsRelativeURL
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
 
-    @"
-http://images.tervis.com/ir/render/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
-    &obj=group
-    &decal
-    &src=is(
-        tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
-        .BG
-        &layer=5
-        &anchor=0,0
-        &src=is(
-            tervis/prj-$ProjectID
-        )
+    $RelativeURL = @"
+tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Vignette)?
+&obj=group
+&decal
+&src=is(
+    tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+    .BG
+    &layer=5
+    &anchor=0,0
+    &src=$(
+        if($ProjectID){
+            "is(tervis/prj-$ProjectID)"
+        } elseif ($ArtBoardImageScene7RelativeURL) {
+            "$ArtBoardImageScene7RelativeURL"
+        } elseif ($ArtBoardImageAbsoluteURL){
+            "($ArtBoardImageAbsoluteURL)"
+        }
     )
-    &show
-    &res=300
-    &req=object
-    &fmt=png-alpha,rgb
-    &scl=1
+)
+&show
+&res=300
+&req=object
 "@ | Remove-WhiteSpace
+
+    if ($AsRelativeURL) {
+        "ir($RelativeURL)"
+    } else {
+        @"
+http://images.tervis.com/ir/render/$($RelativeURL)
+&scl=1
+&fmt=png-alpha
+"@ | Remove-WhiteSpace
+    }
 }
 
 function New-TervisAdobeScene7ColorInkImageURL {
