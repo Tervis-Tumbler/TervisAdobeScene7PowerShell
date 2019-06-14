@@ -667,16 +667,41 @@ function Get-TervisAdboeScene7CustomyzerTervisLogoImageURL {
         [Parameter(Mandatory)]$FormType
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
+    $OrderNumberLayerSize = $CustomyzerSizeAndFormTypeMetaData.OrderNumberLayerSize
 
     @"
 https://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
 `$orderhide=0
 &layer=9999
 &clipPath=
-    M 0,300
-    l200,0 
-    l0,400 
-    l-200,0
+    M 0,$($OrderNumberLayerSize.Width / 2)
+    l$($OrderNumberLayerSize.Height),0 
+    l0,$($OrderNumberLayerSize.Width) 
+    l-$($OrderNumberLayerSize.Height),0
+&fmt=png-alpha
+&scl=1
+"@
+}
+
+function Get-TervisAdboeScene7CustomyzerOrderNumberExampleImageURL {
+    param (
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType
+    )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
+    $OrderNumberLayerSize = $CustomyzerSizeAndFormTypeMetaData.OrderNumberLayerSize
+
+    @"
+https://images.tervis.com/is/image/tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType Base)?
+`$orderhide=0
+&layer=9999
+&clipPath=
+    M 0,0
+    l$($OrderNumberLayerSize.Height),0 
+    l0,$($OrderNumberLayerSize.Width / 2) 
+    l-$($OrderNumberLayerSize.Height),0
 &fmt=png-alpha
 &scl=1
 "@
