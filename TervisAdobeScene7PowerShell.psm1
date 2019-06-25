@@ -113,55 +113,47 @@ function New-TervisAdobeScene7CustomyzerProjectProofImageURL {
         [Parameter(Mandatory)]$ProjectID,
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
-        [Switch]$AsRelativeURL
+        [Switch]$AsScene7RelativeUrl,
+        [Switch]$AsVirtual
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
     $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
     $PrintImageDimensions = $CustomyzerSizeAndFormTypeMetaData.PrintImageDimensions
-    @"
-http://images.tervis.com/is/image/tervis?
+    
+    if ($AsVirtual) {
+        $VignettePositionRelativeToVirtualSampleBackground = $CustomyzerSizeAndFormTypeMetaData.VignettePositionRelativeToVirtualSampleBackground
+        $OutputImageWidth = $VignettePositionRelativeToVirtualSampleBackground.Right - $VignettePositionRelativeToVirtualSampleBackground.Left
+        $OutputImageHeight = $VignettePositionRelativeToVirtualSampleBackground.Bottom - $VignettePositionRelativeToVirtualSampleBackground.Top    
+    }
+    
+    $RelativeURL = @"
+tervisRender?
 &layer=0
 &size=$($PrintImageDimensions.Width),$($PrintImageDimensions.Height)
 &layer=1
-&src=($(New-TervisAdobeScene7VignetteProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID))
+&src=$(New-TervisAdobeScene7VignetteProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsScene7RelativeURL)
 &layer=2
-&src=is($(New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL @GetTemplateNameParameters -AsRelativeURL))
-&scl=1
-&fmt=png-alpha
+&src=$(New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL @GetTemplateNameParameters -AsScene7RelativeUrl)
+$(if($AsVirtual) {"&wid=$OutputImageWidth&hid=$OutputImageHeight"})
 "@ | Remove-WhiteSpace
-}
 
-function New-TervisAdobeScene7CustomyzerProjectVirtualProofImageURL {
-    param (
-        [Parameter(Mandatory)]$ProjectID,
-        [Parameter(Mandatory)]$Size,
-        [Parameter(Mandatory)]$FormType,
-        $Scale = 1,
-        [Switch]$AsRelativeURL
-    )
-    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
-    $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
-    $PrintImageDimensions = $CustomyzerSizeAndFormTypeMetaData.PrintImageDimensions
-    @"
-http://images.tervis.com/is/image/tervis?
-&layer=0
-&size=$($PrintImageDimensions.Width),$($PrintImageDimensions.Height)
-&layer=1
-&src=($(New-TervisAdobeScene7VignetteImageURL @GetTemplateNameParameters -ArtBoardImageScene7RelativeURL (
-    -ProjectID $ProjectID
-) ))
-&layer=2
-&src=is($(New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL @GetTemplateNameParameters -AsRelativeURL))
-&scl=$Scale
+    if ($AsScene7RelativeUrl) {
+        "is($RelativeURL)"
+    } else {
+        @"
+http://images.tervis.com/is/image/
+$($RelativeURL)
+$(if(-not $AsVirtual) {"&scl=1"})
 &fmt=png-alpha
 "@ | Remove-WhiteSpace
+    }
 }
 
 function New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL {
     param (
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
-        [Switch]$AsRelativeURL
+        [Switch]$AsScene7RelativeUrl
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
 
@@ -169,8 +161,8 @@ function New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL {
 tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType DiecutterCalibrationCheckLine)
 "@ | Remove-WhiteSpace
 
-    if ($AsRelativeURL) {
-        $RelativeURL
+    if ($AsScene7RelativeUrl) {
+        "is($RelativeURL)"
     } else {
         @"
 http://images.tervis.com/is/image/$($RelativeURL)?
@@ -184,12 +176,56 @@ function New-TervisAdobeScene7VignetteProofImageURL {
     param (
         [Parameter(Mandatory)]$ProjectID,
         [Parameter(Mandatory)]$Size,
-        [Parameter(Mandatory)]$FormType
+        [Parameter(Mandatory)]$FormType,
+        [Switch]$AsScene7RelativeURL
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
     New-TervisAdobeScene7VignetteImageURL @GetTemplateNameParameters -ArtBoardImageScene7RelativeURL (
-        New-TervisAdobeScene7CustomyzerArtboardProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsRelativeURL
+        New-TervisAdobeScene7CustomyzerArtboardProofImageURL @GetTemplateNameParameters -ProjectID $ProjectID -AsScene7RelativeURL
+    ) -AsScene7RelativeURL:$AsScene7RelativeURL
+}
+
+function New-TervisAdobeScene7CustomyzerProofImageURL {
+    param (
+        [Parameter(Mandatory)]$ProjectID,
+        [Parameter(Mandatory)]$Size,
+        [Parameter(Mandatory)]$FormType,
+        [Switch]$ShowMask,
+        [Switch]$AsScene7RelativeUrl
     )
+    $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
+    $CustomyzerSizeAndFormTypeMetaData =  Get-CustomyzerSizeAndFormTypeMetaData @GetTemplateNameParameters
+    
+    $VignettePositionRelativeToVirtualSampleBackground = $CustomyzerSizeAndFormTypeMetaData.VignettePositionRelativeToVirtualSampleBackground
+
+    $ProjectVirtualRelativeURL = New-TervisAdobeScene7CustomyzerProjectProofImageURL -ProjectID $ProjectID @GetTemplateNameParameters -AsVirtual -AsScene7RelativeUrl
+    $VignetteWidth = $VignettePositionRelativeToVirtualSampleBackground.Right - $VignettePositionRelativeToVirtualSampleBackground.Left
+    $VignetteHeight = $VignettePositionRelativeToVirtualSampleBackground.Bottom - $VignettePositionRelativeToVirtualSampleBackground.Top
+    $ProofBackgroundWidth = 1650
+    $ProofBackgroundHeight = 1275
+
+    $PosX = ($VignetteWidth/2) - ($ProofBackgroundWidth/2) + $VignettePositionRelativeToVirtualSampleBackground.Left
+    $PosY = ($VignetteHeight/2) - ($ProofBackgroundHeight/2) + $VignettePositionRelativeToVirtualSampleBackground.Top
+
+    $RelativeURL = @"
+tervis?
+&layer=0
+&src=is(tervisRender/VIRTUALS_ALL_Background)
+&layer=1
+&src=$ProjectVirtualRelativeURL
+&pos=$PosX,$PosY
+"@ | Remove-WhiteSpace
+
+    if ($AsScene7RelativeUrl) {
+        "is($RelativeURL)"
+    } else {
+        @"
+http://images.tervis.com/is/image/
+$($RelativeURL)
+&scl=1
+&fmt=png-alpha
+"@ | Remove-WhiteSpace
+    }
 }
 
 function New-TervisAdobeScene7CustomyzerArtboardProofImageURL {
@@ -197,7 +233,8 @@ function New-TervisAdobeScene7CustomyzerArtboardProofImageURL {
         [Parameter(Mandatory)]$ProjectID,
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
-        [Switch]$AsRelativeURL
+        [Switch]$ShowMask,
+        [Switch]$AsScene7RelativeUrl
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
     
@@ -212,7 +249,7 @@ tervis/prj-$($ProjectID)?
 &layer=0
 &bgColor=e6e7e8
 $(
-    if($ProofMaskDimensions.VerticalBar) {
+    if($ProofMaskDimensions.VerticalBar -and $ShowMask) {
         @"
 &layer=1
 &originN=0.5,0
@@ -223,7 +260,7 @@ $(
     }
 )
 $(
-    if($ProofMaskDimensions.HorizontalBar) {
+    if($ProofMaskDimensions.HorizontalBar -and $ShowMask) {
         @"
 &layer=2
 &originN=0.5,0
@@ -235,7 +272,7 @@ $(
 )
 "@ | Remove-WhiteSpace
 
-    if ($AsRelativeURL) {
+    if ($AsScene7RelativeUrl) {
         "is($RelativeURL)"
     } else {
         @"
@@ -282,7 +319,7 @@ function New-TervisAdobeScene7VignetteImageURL {
         [Parameter(Mandatory,ParameterSetName="ArtBoardImageAbsoluteURL")]$ArtBoardImageAbsoluteURL,
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
-        [Switch]$AsRelativeURL
+        [Switch]$AsScene7RelativeUrl
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
 
@@ -310,7 +347,7 @@ tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -Templ
 &req=object
 "@ | Remove-WhiteSpace
 
-    if ($AsRelativeURL) {
+    if ($AsScene7RelativeUrl) {
         "ir($RelativeURL)"
     } else {
         @"
@@ -954,4 +991,128 @@ function Invoke-TervisAdobeScene7ImagePresetAnalysis {
     Sort-Object -Property Name |
     Select-Object -Property (@("Name")+$PropertyNames) -ErrorAction SilentlyContinue |
     Format-Table -Property *
+}
+
+function Get-SizeAndFormTypeTravelLids {
+    param (
+        $Size,
+        $FormType
+    )
+    $URL = Get-TervisAdobeScene7VignetteContentsURL -Size $Size -FormType $FormType -VignetteType Stock
+    $XML = Invoke-RestMethod -Uri $URL
+
+    $Xml.vignette.contents.group.group |
+    Where-Object -Property id -eq ACCESSORIES |
+    Select-Object -ExpandProperty group |
+    Where-Object -Property id -eq LIDTRV |
+    Select-Object -ExpandProperty group
+}
+function Get-TervisAdobeScene7VignetteContentsURL {
+    param(
+        [Parameter(ParameterSetName="VignetteType",Mandatory)]$Size,
+        [Parameter(ParameterSetName="VignetteType",Mandatory)]$FormType,
+        [Parameter(ParameterSetName="VignetteType",Mandatory)]$VignetteType,
+        [Parameter(ParameterSetName="VignetteName",Mandatory)]$VignetteName
+    )
+    $VignetteTypeToSuffixMap = @{
+        Hero = "1-HERO2"
+        Stock =  "1"
+    }
+
+    if ($VignetteType) {
+        $VignetteName = "$($Size)$($FormType)$($VignetteTypeToSuffixMap.$VignetteType)"
+    }
+
+    "https://images.tervis.com/ir/render/tervisRender/$($VignetteName)?req=contents"
+}
+
+function Get-TervisAdobeScene7VignetteURL {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]$VignetteName
+    )
+    DynamicParam {
+        $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        $VignetteName = "24DWT1"
+        $XML = $Script:Vignettes.$VignetteName
+
+        if (-not $XML) {
+            $URL = Get-TervisAdobeScene7VignetteContentsURL -VignetteName $VignetteName
+            $XML = Invoke-RestMethod -Uri $URL
+            $Script:Vignettes.$VignetteName = $XML    
+        }
+
+        $Xml.vignette.contents.group.group | Select-Object -ExpandProperty ID
+
+        New-DynamicParameter -Name FirstObjectGroup -ValidateSet (
+            $Xml.vignette.contents.group.group | Select-Object -ExpandProperty ID
+        ) -Dictionary $DynamicParameters -ValueFromPipelineByPropertyName
+    }
+
+}
+$Script:Vignettes = @{}
+function Select-TervisAdobeScene7VignetteObject {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]$VignetteName
+    )
+    DynamicParam {
+        $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        # $VignetteName = "24DWT1"
+
+        if ($VignetteName) {
+            $XML = $Script:Vignettes.$VignetteName
+
+            if (-not $XML) {
+                $URL = Get-TervisAdobeScene7VignetteContentsURL -VignetteName $VignetteName
+                $XML = Invoke-RestMethod -Uri $URL
+                $Script:Vignettes.$VignetteName = $XML    
+            }
+    
+            $Groups = $Xml.vignette.contents.group.group
+    
+            New-DynamicParameter -Name Group -ValidateSet (
+                $Groups | Select-Object -ExpandProperty ID
+            ) -Dictionary $DynamicParameters
+    
+            if ($DynamicParameters.Keys -contains "Group") {
+                # New-DynamicParameter -Name SubGroup -Dictionary $DynamicParameters
+                $GroupIndex = $Groups.IndexOf(($Groups | Where-Object -Property ID -EQ $Group))
+                if ($Groups[$GroupIndex].group) {
+                    New-DynamicParameter -Name SubGroup -ValidateSet (
+                        $Groups[$GroupIndex].group | Select-Object -ExpandProperty ID
+                    ) -Dictionary $DynamicParameters    
+                }
+            }
+        }
+        
+        $DynamicParameters
+    }
+    process {
+        $PSBoundParameters
+    }
+}
+
+function test-dynamicparam {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]$Thing
+    )
+    DynamicParam {
+        $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        New-DynamicParameter -Name Group -ValidateSet (
+            1..12
+        ) -Dictionary $DynamicParameters
+        Wait-Debugger
+        if ($Group -eq 1) {
+            New-DynamicParameter -Name SubGroup -ValidateSet (
+                100..110
+            ) -Dictionary $DynamicParameters    
+        }
+        
+        $DynamicParameters
+    }
+    process {
+        $PSBoundParameters
+    }
 }
