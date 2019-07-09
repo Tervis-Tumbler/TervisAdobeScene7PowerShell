@@ -105,7 +105,7 @@ function New-TervisAdobeScene7CustomyzerArtboardImageURL {
     param (
         [Parameter(Mandatory)]$ProjectID
     )
-    "http://images.tervis.com/is/image/tervis/prj-$($ProjectID)?scl=1"
+    "http://images.tervis.com/is/image/tervis/prj-$($ProjectID)?scl=1&fmt=png-alpha"
 }
 
 function New-TervisAdobeScene7CustomyzerProjectProofImageURL {
