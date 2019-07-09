@@ -175,6 +175,7 @@ $(if(-not $AsVirtual) {"&scl=1"})
         } elseif ($Type -eq "ImageRender") {
             $URL = [URI]"https://images.tervis.com/ir/render/$RelativeURL"
         }
+        
         $ParametersToAdd = "&scl=1&fmt=png-alpha"
         $URLString = if ($URL.Query) {
             "$($URL.OriginalString)$ParametersToAdd"
@@ -182,7 +183,7 @@ $(if(-not $AsVirtual) {"&scl=1"})
             "$($URL.OriginalString)?$ParametersToAdd"
         }
         
-        return $URLString
+        $URLString
     }
 }
 
