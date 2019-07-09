@@ -149,27 +149,52 @@ $(if(-not $AsVirtual) {"&scl=1"})
     }
 }
 
+ function New-TervisAdobeScene7URL {
+    param (
+        [ValidateSet("ImageServer","ImageRender")]
+        [Parameter(Mandatory)]
+        $Type,
+
+        $RelativeURL,
+        [Switch]$AsScene7SrcValue,
+        $ExternalURL
+    )
+    if ($AsScene7SrcValue) {
+        if ($Type -eq "ImageServer") {
+            "is{$RelativeURL}"
+        } elseif ($Type -eq "ImageRender") {
+            "ir{$RelativeURL}"
+        } elseif ($ExternalURL) {
+            [regex]$Regex = "^https"
+            $ExternalURLWithoutHttps = $Regex.replace($ExternalURL, "http", 1)
+            "{$ExternalURLWithoutHttps}"
+        }
+    } else {
+        if ($Type -eq "ImageServer") {
+            $URL = [URI]"https://images.tervis.com/is/image/$RelativeURL"
+        } elseif ($Type -eq "ImageRender") {
+            $URL = [URI]"https://images.tervis.com/ir/render/$RelativeURL"
+        }
+        $ParametersToAdd = "&scl=1&fmt=png-alpha"
+        $URLString = if ($URL.Query) {
+            "$($URL.OriginalString)$ParametersToAdd"
+        } else {
+            "$($URL.OriginalString)?$ParametersToAdd"
+        }
+        
+        return $URLString
+    }
+}
+
 function New-TervisAdobeScene7DiecutterCalibrationCheckLineImageURL {
     param (
         [Parameter(Mandatory)]$Size,
         [Parameter(Mandatory)]$FormType,
-        [Switch]$AsScene7RelativeUrl
+        [Switch]$AsScene7SrcValue
     )
     $GetTemplateNameParameters = $PSBoundParameters | ConvertFrom-PSBoundParameters -Property Size,FormType -AsHashTable
-
-    $RelativeURL = @"
-tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType DiecutterCalibrationCheckLine)
-"@ | Remove-WhiteSpace
-
-    if ($AsScene7RelativeUrl) {
-        "is($RelativeURL)"
-    } else {
-        @"
-http://images.tervis.com/is/image/$($RelativeURL)?
-scl=1
-&fmt=png-alpha
-"@ | Remove-WhiteSpace
-    }
+    $RelativeURL = "tervisRender/$(Get-CustomyzerImageTemplateName @GetTemplateNameParameters -TemplateType DiecutterCalibrationCheckLine)"    
+    New-TervisAdobeScene7URL -Type ImageServer -RelativeURL $RelativeURL -AsScene7SrcValue:$AsScene7SrcValue
 }
 
 function New-TervisAdobeScene7VignetteProofImageURL {
