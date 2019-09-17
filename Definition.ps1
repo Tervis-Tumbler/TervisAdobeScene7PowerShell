@@ -53,6 +53,12 @@ $TervisAdobeScene7ImagePresets = @{
         "UGC-ALPHA-70" = "fmt=png-alpha&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=72&scl=1&op_brightness=70"
         "UGC-ALPHA-90" = "fmt=png-alpha&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=72&scl=1&op_brightness=90"
     }
+    tervis = @{
+        "PRINT" = "wid=2000&hei=2000&fmt=tif-alpha,rgb&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=300"
+        "PDP-ZM-ALPHA" = "wid=1401&hei=1232&fmt=png-alpha,rgb&qlt=75,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=72&op_blur=.6"
+        "PDP-LG" = "wid=540&hei=475&fmt=jpeg,rgb&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=72"
+        "PER-LG" = "wid=540&hei=475&fmt=jpeg&qlt=85,1&op_sharpen=0&resMode=sharp2&op_usm=1,1,6,0&iccEmbed=0&printRes=72"
+    }
 }
 
 $Templates = @{
