@@ -246,3 +246,111 @@ layer=0&size=3074,1748&color=ffffff&opac=0&`$orderhide=1&layer=1&src=tervisRende
     layer=0&size=2916,2367&anchor=0,0&layer=1&size=2916,2367&pos=1458,1183
 "@ | Remove-WhiteSpace
 }
+
+$Deco3ImageTemplates = @{
+    "16DWT-DECO3" = @"
+        $img-src=tervis/16oz_Unwarp_893&layer=0&size=4058,893&color=ffffff&opac=0&layer=1&src=$img-src$&size=1387,893&pos=-1325,0&layer=2&src=$img-src$&size=1387,893&layer=3&src=$img-src$&size=1387,893&pos=1342,0
+"@
+    "6SIP-DECO3" = @"
+        $img-src=tervis/6oz_Unwarp_CHX&layer=0&size=3337,402&color=ffffff&opac=0&layer=1&src=$img-src$&size=1139,402&pos=-1097,0&layer=2&src=$img-src$&size=1139,402&layer=3&src=$img-src$&size=1139,402&pos=1097,0
+"@
+    "10WAV-DECO3" = @"
+        $img-src=tervis/10oz_unwarp_CHX&layer=0&size=3896,814&color=ffffff&opac=0&layer=1&src=$img-src$&size=1331,814&pos=-1280,0&layer=2&src=$img-src$&size=1331,814&layer=3&src=$img-src$&size=1331,814&pos=1280,0
+"@
+    "12DWT-DECO3" = @"
+        $img-src=tervis/12DWT-unwarp&layer=0&size=5032,670&color=ffffff&opac=0&layer=1&src=$img-src$&size=1725,670&pos=-1652,0&layer=2&src=$img-src$&size=1725,670&layer=3&src=$img-src$&size=1725,670&pos=1652,0
+"@
+    "16MUG-DECO3" = @"
+        $img-src=tervis/16MUG-unwarp&layer=0&size=4391,677&color=ffffff&opac=0&layer=1&src=$img-src$&size=1504,677&pos=-1440,0&layer=2&src=$img-src$&size=1504,677&layer=3&src=$img-src$&size=1504,677&pos=1460,0
+"@
+    "24DWT-DECO3" = @"
+        $img-src=tervis/24oz_Unwarp1_CHX&layer=0&size=3712,944&color=ffffff&opac=0&layer=1&src=$img-src$&size=1261,944&pos=-1222,0&layer=2&src=$img-src$&size=1261,944&layer=3&src=$img-src$&size=1261,944&pos=1222,0
+"@
+    "24WB-DECO3" = @"
+        $img-src=tervis/WB_unwarp_CHX&layer=0&size=2668,791&color=ffffff&opac=0&layer=1&src=$img-src$&size=930,791&pos=-900,0&layer=2&src=$img-src$&size=930,791&layer=3&src=$img-src$&size=930,791&pos=900,0
+"@
+    "16DWT-EMB-DECO3" = @"
+        devmode=true&$img-src=tervis/1157235_EMB_ShoppingNinja&layer=0&size=4058,893&color=ffffff&opac=0&layer=1&src=$img-src$&res=17&anchorn=0,-0.5&pos=0,-270&layer=2&src=$img-src$&res=17&anchorn=0,-0.5&pos=-1325,-270&layer=3&src=$img-src$&res=17&anchorn=0,-0.5&pos=1340,-270
+"@
+    "10WAV-EMB-DECO3" = @"
+        devmode=true&$img-src=tervis/1157235_EMB_ShoppingNinja&layer=0&size=3896,814&color=ffffff&opac=0&layer=4&src=$img-src$&res=17&anchorn=0,-0.5&pos=0,-250&layer=5&src=$img-src$&res=17&anchorn=0,-0.5&pos=1300,-250&layer=6&src=$img-src$&res=17&anchorn=0,-0.5&pos=-1275,-250
+"@
+    "24DWT-EMB-DECO3" = @"
+        devmode=true&$img-src=tervis/1069906&layer=0&size=3712,944&color=ffffff&opac=0&layer=1&src=$img-src$&anchorn=0,-0.5&res=17&pos=-1220,-315&layer=2&src=$img-src$&anchorn=0,-0.5&res=17&pos=1220,-315&layer=3&src=$img-src$&anchorn=0,-0.5&res=17&pos=0,-315
+"@
+    "24WB-EMB-DECO3" = @"
+        devmode=true&$img-src=tervis/1069906&layer=0&size=2668,791&color=ffffff&opac=0&layer=1&src=$img-src$&anchorn=0,-0.5&res=12&pos=-1128,-260&layer=2&src=$img-src$&anchorn=0,-0.5&res=12&pos=-222,-260&layer=3&src=$img-src$&anchorn=0,-0.5&res=12&pos=670,-260
+"@
+    "12DWT-EMB-DECO3" = @"
+        devmode=true&$img-src=tervis/1069906&layer=0&size=5032,670&color=ffffff&opac=0&layer=1&src=$img-src$&anchorn=0,-0.5&res=20&pos=-1650,-190&layer=2&src=$img-src$&anchorn=0,-0.5&res=20&pos=0,-190&layer=3&src=$img-src$&anchorn=0,-0.5&res=20&pos=1650,-190
+"@
+    "16DWT-WRA-DECO3" = @"
+        $img-src=tervis/16oz_Unwarp_893&layer=0&size=4058,893&color=ffffff&opac=0&layer=1&src=$img-src$&size=1387,893&pos=-1325,0&layer=2&src=$img-src$&size=1387,893&layer=3&src=$img-src$&size=1387,893&pos=1342,0
+"@
+    "2SHO-WRA-DECO3" = @"
+        $img-src=tervis/2oz_unwarp&layer=0&size=2935,439&color=ffffff&opac=0&layer=1&src=$img-src$&size=1011,439&pos=-961,0&layer=2&src=$img-src$&size=1011,439&layer=3&src=$img-src$&size=1011,439&pos=961,0
+"@
+    "6SIP-WRA-DECO3" = @"
+        $img-src=tervis/6oz_Unwarp_CHX&layer=0&size=3337,402&color=ffffff&opac=0&layer=1&src=$img-src$&size=1139,402&pos=-1097,0&layer=2&src=$img-src$&size=1139,402&layer=3&src=$img-src$&size=1139,402&pos=1097,0
+"@
+    "10WAV-WRA-DECO3" = @"
+        $img-src=tervis/10oz_unwarp_CHX&layer=0&size=3896,814&color=ffffff&opac=0&layer=1&src=$img-src$&size=1331,814&pos=-1280,0&layer=2&src=$img-src$&size=1331,814&layer=3&src=$img-src$&size=1331,814&pos=1280,0
+"@
+    "12DWT-WRA-DECO3" = @"
+        $img-src=tervis/12DWT-unwarp&layer=0&size=5032,670&color=ffffff&opac=0&layer=1&src=$img-src$&size=1725,670&pos=-1652,0&layer=2&src=$img-src$&size=1725,670&layer=3&src=$img-src$&size=1725,670&pos=1652,0
+"@
+    "24DWT-WRA-DECO3" = @"
+        $img-src=tervis/24oz_Unwarp1_CHX&layer=0&size=3712,944&color=ffffff&opac=0&layer=1&src=$img-src$&size=1261,944&pos=-1222,0&layer=2&src=$img-src$&size=1261,944&layer=3&src=$img-src$&size=1261,944&pos=1222,0
+"@
+    "24WB-WRA-DECO3" = @"
+        $img-src=tervis/WB_unwarp_CHX&layer=0&size=2668,791&color=ffffff&opac=0&layer=1&src=$img-src$&size=930,791&pos=-900,0&layer=2&src=$img-src$&size=930,791&layer=3&src=$img-src$&size=930,791&pos=900,0
+"@
+    "87ICE-EMB-DECO3" = @"
+        $img-src=tervis/1069906&layer=0&size=641,628&color=ffffff&opac=0&layer=1&src=$img-src$&anchorn=0,-0.5&res=10&pos=0,-145
+"@
+    "16TALL-EMB-DECO3" = @"
+        devmode=true&$img-src=tervis/1157235_EMB_ShoppingNinja&layer=0&size=4058,893&color=ffffff&opac=0&layer=1&src=$img-src$&res=17&anchorn=0,-0.5&pos=0,-270&layer=2&src=$img-src$&res=17&anchorn=0,-0.5&pos=-1325,-270&layer=3&src=$img-src$&res=17&anchorn=0,-0.5&pos=1340,-270
+"@
+    "9WINE-WRA-DECO3" = @"
+        $img-src=tervis/9oz_unwarp&layer=0&size=8400,757&color=ffffff&opac=0&layer=1&src=$img-src$&size=2870,757&pos=-2761,0&layer=2&src=$img-src$&size=2870,757&layer=3&src=$img-src$&size=2870,757&pos=2763,0
+"@
+    "9SWG-WRA-DECO3" = @"
+        $img-src=tervis/9oz_unwarp&layer=0&size=8400,757&color=ffffff&opac=0&layer=1&src=$img-src$&size=2870,757&pos=-2761,0&layer=2&src=$img-src$&size=2870,757&layer=3&src=$img-src$&size=2870,757&pos=2763,0
+"@
+    "16MUG-WRA-DECO3" = @"
+        $img-src=tervis/mug_unwarp-030217&layer=0&size=4061,677&color=ffffff&opac=0&layer=1&src=$img-src$&size=1437,531&pos=1316,-75&layer=2&src=$img-src$&size=1426,531&pos=0,-75&layer=3&src=$img-src$&size=1437,531&pos=-1316,-75
+"@
+    "20SS-DPT-DECO3" = @"
+        $img-src=tervis/SIC20-chx&layer=0&size=4461,1016&color=ffffff&opac=0&layer=1&src=$img-src$&size=1487,1016&layer=2&src=$img-src$&size=1487,1016&pos=-1487,0&layer=3&src=$img-src$&size=1487,1016&pos=1487,0
+"@
+    "30SS-DPT-DECO3" = @"
+        $img-src=tervis/SIC30-chx&layer=0&size=4329,1024&color=ffffff&opac=0&layer=1&src=$img-src$&size=1443,1024&pos=-1443,0&layer=2&src=$img-src$&size=1443,1024&pos=1443,0&layer=3&src=$img-src$&size=1443,1024
+"@
+    "16MUG-EMB-DECO3" = @"
+        $img-src=tervis/1069906&layer=0&size=4061,677&color=ffffff&opac=0&layer=1&src=tervis/mug_unwarp-030217&size=1437,531&pos=1316,-75&hide=1&layer=2&src=tervis/mug_unwarp-030217&size=1426,531&pos=0,-75&hide=1&layer=3&src=$img-src$&anchorn=0,-0.5&size=713,686&res=16&pos=-1639,-198&layer=4&src=$img-src$&anchorn=0,-0.5&size=713,686&res=16&pos=995,-198&layer=5&src=$img-src$&anchorn=0,-0.5&size=713,686&res=16&pos=-323,-198
+"@
+    "16BEER-WRA-DECO3" = @"
+        $img-src=tervis/beerMugArtboard-guides&layer=0&size=7708,1620&color=ffffff&opac=0&layer=1&src=$img-src$&size=2625,1620&pos=-2539,0&layer=2&src=$img-src$&size=2625,1620&layer=3&src=$img-src$&size=2625,1620&pos=2539,0
+"@
+    "16BEER-EMB-DECO3" = @"
+        $img-src=tervis/1069906&layer=0&size=7708,1620&color=ffffff&opac=0&layer=1&src=tervis/beerMugArtboard-guides&size=2625,1620&pos=-2539,0&hide=1&layer=2&src=tervis/beerMugArtboard-guides&size=2625,1620&hide=1&layer=3&src=tervis/beerMugArtboard-guides&size=2625,1620&pos=2539,0&hide=1&layer=4&src=$img-src$&anchorn=0,-0.5&size=713,686&pos=-3209,-475&layer=5&src=$img-src$&anchorn=0,-0.5&size=713,686&pos=-669,-475&layer=6&src=$img-src$&anchorn=0,-0.5&size=713,686&pos=1891,-475
+"@
+    "24SS-DPT-DECO3" = @"
+        $img-src=tervis/sswb-guides&layer=0&size=8748,2367&color=ffffff&opac=0&layer=1&src=$img-src$&size=2916,2367&pos=-2923,0&layer=2&src=$img-src$&size=2916,2367&pos=2918,0&layer=3&src=$img-src$&size=2916,2367
+"@
+    "12SS-DPT-DECO3" = @"
+        $img-src=tervis/12SS-guides&layer=0&size=10134,1476&color=ffffff&opac=0&layer=1&src=$img-src$&size=3378,1476&pos=-3378,0&layer=2&src=$img-src$&size=3378,1476&pos=3378,0&layer=3&src=$img-src$&size=3378,1476
+"@
+    "17SS-DPT-DECO3" = @"
+        $img-src=tervis/17oz_checker-2&layer=0&size=7569,2367&color=ffffff&opac=0&layer=1&src=$img-src$&size=2523,2367&pos=-2523,0&layer=2&src=$img-src$&size=2523,2367&layer=3&src=$img-src$&size=2523,2367&pos=2523,0
+"@
+    "16DWT-DPC-DECO3" = @"
+        $img-src=tervis/16DWT_DPC_CHX&layer=0&size=7677,1571&color=ffffff&opac=0&layer=1&src=$img-src$&size=2559,1571&pos=2559,0&layer=2&src=$img-src$&size=2559,1571&layer=3&src=$img-src$&size=2559,1571&pos=-2559,0
+"@
+    "20SS-LET-DECO3" = @"
+        $img-src=tervis/SIC20-chx&layer=0&size=4461,1016&color=ffffff&opac=0&layer=1&src=$img-src$&size=1487,1016&layer=2&src=$img-src$&size=1487,1016&pos=-1487,0&layer=3&src=$img-src$&size=1487,1016&pos=1487,0
+"@
+    "30SS-LET-DECO" = @"
+        $img-src=tervis/LETplaceholder&$img-src2=tervis/SIC30-chx&layer=0&size=4329,1024&color=ffffff&opac=0&layer=1&src=$img-src2$&size=1443,1024&pos=-1443,0&hide=1&layer=2&src=$img-src2$&size=1443,1024&pos=1443,0&hide=1&layer=3&src=$img-src2$&size=1443,1024&hide=1&layer=4&src=$img-src$&res=17&anchorn=0,-0.5&pos=0,-512&layer=5&src=$img-src$&res=17&anchorn=0,-0.5&pos=1443,-512&layer=6&src=$img-src$&res=17&anchorn=0,-0.5&pos=-1443,-512
+"@
+}
