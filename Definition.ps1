@@ -152,6 +152,13 @@ devmode=true&`$orderhide=1&`$ordersize=2613,1614&`$img-src2=tervisRender/BEER-bl
     "SS_24oz_base2" = @"
     `$img-src2=tervisRender/24SS_blank&`$orderhide=1&layer=0&size=2916,2367&anchor=0,0&layer=1&src=`$img-src2`$&size=2916,2367&pos=1458,1183&layer=2&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=0,2264&hide=`$orderhide`$&layer=3&src=tervisRender/tervislogo-white-customyzer&size=380,92&pos=2916,2264&hide=`$orderhide`$
 "@ | Remove-WhiteSpace
+    "mark_mask_v1" = @"
+    `$orderhide=1&layer=0&size=885,1023&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C
+"@ | Remove-WhiteSpace
+    "16oz_mark_mask" = @"
+    `$layer_1_pos=0,0&`$orderhide=1&layer=0&size=3084,1873&layer=1&sizeN=1,1&color=00a99c&fmt=gif,gray&quantize=adaptive,off,5,ffffff,ffffff,ffffff,ffffff,00A99C&pos=`$layer_1_pos`$&layer=2&src=tervisRender/CustVM5_Test&size=150,173&pos=-22,447
+"@ | Remove-WhiteSpace
+
 }
 
 $TemplatesWithoutOrderNumberAndDefaultImages = @{
